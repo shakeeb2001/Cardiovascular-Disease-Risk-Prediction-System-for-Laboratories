@@ -1,6 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginHome from './pages/loginForm/LoginHome';
 import Dashboard from './pages/dashBoard/Dashboard';
 import LoginForm from './pages/loginForm/LoginForm';
 import SignOutForm from './pages/signout/signout';
@@ -15,6 +16,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/home" element={<LoginHome />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signout" element={<SignOutForm />} />

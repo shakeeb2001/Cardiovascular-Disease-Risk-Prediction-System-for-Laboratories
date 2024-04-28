@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
-import './LoginForm.css'
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCardBody,
-  MDBInput,
-} from 'mdb-react-ui-kit';
+import './LoginForm.css';
+import { Button, Container, Row, Col, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
@@ -39,45 +31,43 @@ function LoginForm() {
     }
   };
 
-  
   return (
-    <MDBContainer fluid className='h-100'>
-      <MDBRow className='d-flex justify-content-center align-items-center h-100'>
-        <MDBCol col='12'>
-          <MDBCard className='text-white my-5 mx-auto login-form' style={{ borderRadius: '1rem', maxWidth: '400px' }}>
-            <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
+    <Container fluid className='h-100'>
+      <Row className='justify-content-center align-items-center h-100'>
+        <Col xs={12}>
+          <Card className='text-white my-5 mx-auto login-form' style={{ borderRadius: '1rem', maxWidth: '400px' }}>
+            <Card.Body className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
               <h3 className="fw-bold mb-2 text-uppercase">C A R D I O C A R E <span className='cardio-care'>+</span></h3>
               <p className="text-white-50 mb-5">Please enter your login and password!</p>
 
-              <MDBInput 
-                wrapperClass='mb-4 mx-5 w-100' 
-                labelClass='text-white' 
-                placeholder='Username' 
-                id='username' 
-                type='text' 
-                size="lg"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <MDBInput 
-                wrapperClass='mb-4 mx-5 w-100' 
-                labelClass='text-white' 
-                placeholder='Password' 
-                id='password' 
-                type='password' 
-                size="lg"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <Form.Group className='mb-4 mx-5 w-100'>
+                <Form.Control
+                  className='text-white'
+                  type='text'
+                  placeholder='Username'
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Form.Group>
 
-              <MDBBtn outline className='mx-2 px-5 login-button' onClick={handleLogin}>
+              <Form.Group className='mb-4 mx-5 w-100'>
+                <Form.Control
+                  className='text-white'
+                  type='password'
+                  placeholder='Password'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Group>
+
+              <Button variant='outline-light' className='mx-2 login-button' size='lg' onClick={handleLogin}>
                 Login
-              </MDBBtn>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
