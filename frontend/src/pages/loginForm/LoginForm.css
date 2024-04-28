@@ -1,0 +1,36 @@
+.login-background{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.199); /* Adjust the last value to change transparency */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+
+}
+
+
+.cardio-care{
+    font-size: 50px;
+    color: #c63d3d;
+}
+
+.login-form{
+    top: 150px;
+    background-color: rgb(23, 141, 126);
+    color: white;
+    border: none;
+
+}
+.login-button{
+    border: none;
+    color: rgb(23, 141, 126);
+    background-color: rgb(255, 255, 255);
+}
+
+.login-button:hover{
+
+    background-color: rgb(18, 98, 87);
+}
+

@@ -1,0 +1,29 @@
+.signout-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+  }
+  
+  .signout-card {
+    background-color: aliceblue;
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .signout-content {
+    padding: 20px;
+  }
+  
+  .signout-title {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .signout-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  

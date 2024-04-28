@@ -1,0 +1,37 @@
+/* InputForm.css */
+body {
+    background-color: rgb(57, 93, 88);
+  }
+  
+  .input-form-container {
+    padding-top: 20px;
+    background-color: rgb(57, 93, 88);
+    color: white;
+    overflow: hidden;
+  }
+  
+  .input-form {
+    max-width: 500px;
+    margin: auto;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .btn-secondary {
+    width: 50%;
+    margin-left: 120px;
+    background-color: rgb(25, 148, 132);
+    color: rgb(255, 255, 255);
+    border: none;
+  }
+  
+  .btn-secondary:hover {
+    background-color: rgb(9, 54, 48);
+  }
+  
+  .btn-secondary[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }

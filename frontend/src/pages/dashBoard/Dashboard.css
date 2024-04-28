@@ -1,0 +1,29 @@
+.dash-class{
+    overflow: hidden;
+    color: rgb(11, 74, 65);
+    
+}
+
+.dashboard-card {
+    height: 100px;
+}
+
+.dashboard-card-link {
+    top: 150px;
+    font-size: 50px;
+    text-decoration: none;
+    padding-top: 65px;
+    background-color: rgb(23, 141, 126);
+    color: white;
+    height: 200px;
+    border: none;
+    transition: transform 0.3s; /* Added transition */
+}
+
+.dashboard-card-link:hover {
+    color: white;
+    background-color: rgb(17, 117, 104);
+    transform: scale(1.05); /* Added transformation */
+}
+
+
