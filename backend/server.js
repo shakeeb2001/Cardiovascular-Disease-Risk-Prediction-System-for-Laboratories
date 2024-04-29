@@ -43,7 +43,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Login route
-// Login route
+
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -75,11 +75,28 @@ app.post('/patient-details', async (req, res) => {
       // Assuming you have a patients collection in your Firestore
       await db.collection('patients').add(req.body);
       res.status(200).json({ message: 'Patient details saved successfully' });
+      console.log('saved');
     } catch (error) {
       console.error('Error saving patient details:', error);
       res.status(500).json({ message: 'Failed to save patient details' });
     }
   });
+
+  // Fetch all patient details route
+app.get('/all-patient-details', async (req, res) => {
+    try {
+        const patientsSnapshot = await db.collection('patients').get();
+        const patients = [];
+        patientsSnapshot.forEach(doc => {
+            patients.push(doc.data());
+        });
+        res.status(200).json(patients);
+    } catch (error) {
+        console.error('Error fetching patient details:', error);
+        res.status(500).json({ message: 'Failed to fetch patient details' });
+    }
+});
+
 
 
 

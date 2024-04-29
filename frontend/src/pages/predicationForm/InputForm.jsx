@@ -5,25 +5,25 @@ import './InputForm.css';
 
 function InputForm({ setResults }) {
   const [formData, setFormData] = useState({
-    name: '',
-    nationalid: '',
-    email: '',
-    sex: '',
-    age: '',
-    height: '',
-    weight: '',
-    currentSmoker: '',
-    cigsPerDay: '',
-    BPMeds: '',
-    prevalentStroke: '',
-    prevalentHyp: '',
-    diabetes: '',
-    totChol: '',
-    sysBP: '',
-    diaBP: '',
-    BMI: '',
-    heartRate: '',
-    glucose: ''
+    name: 'shakeeb',
+    nationalid: '20011470987',
+    email: 'ahamed@gmail.com',
+    sex: '1',
+    age: '34',
+    height: '180',
+    weight: '80',
+    currentSmoker: '1',
+    cigsPerDay: '15',
+    BPMeds: '0',
+    prevalentStroke: '0',
+    prevalentHyp: '0',
+    diabetes: '0',
+    totChol: '230',
+    sysBP: '110',
+    diaBP: '88',
+    BMI: '24',
+    heartRate: '90',
+    glucose: '110'
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -38,17 +38,34 @@ function InputForm({ setResults }) {
     }));
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post('http://127.0.0.1:5000/predict', JSON.stringify(formData), {
+      // First, make the prediction request
+      const predictionRes = await axios.post('http://127.0.0.1:5000/predict', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
-      setResults(res.data);
+      setResults(predictionRes.data);
+  
+      // Extract prediction results
+      const { risk_level_percentage, result, stress_level } = predictionRes.data;
+  
+      // Add prediction results to formData
+      const dataToSend = {
+        ...formData,
+        risk_level_percentage,
+        result,
+        stress_level
+      };
+  
+      // Save form input data along with prediction results
+      await axios.post('http://127.0.0.1:4000/patient-details', dataToSend);
+  
+      // Navigate to result page
       navigate('/result');
     } catch (error) {
       console.error('Error:', error.response ? error.response.data : error.message);
@@ -56,7 +73,7 @@ function InputForm({ setResults }) {
       setIsLoading(false);
     }
   };
-
+  
   useEffect(() => {
     const isComplete = Object.values(formData).every((value) => value !== '');
     setIsFormComplete(isComplete);
