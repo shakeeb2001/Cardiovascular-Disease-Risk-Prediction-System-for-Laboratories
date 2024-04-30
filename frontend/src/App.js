@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginHome from './pages/loginForm/LoginHome';
+import Communication  from './pages/communication/Communication';
 import Dashboard from './pages/dashBoard/Dashboard';
 import Reports from './pages/Reports/Report';
 import LoginForm from './pages/loginForm/LoginForm';
@@ -20,6 +21,7 @@ function App() {
         <Route path="/home" element={<LoginHome />} />
         <Route path="/" element={<Dashboard />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/communication" element={<Communication />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signout" element={<SignOutForm />} />
         <Route path="/prediction" element={<InputForm setResults={setResults} />} />
