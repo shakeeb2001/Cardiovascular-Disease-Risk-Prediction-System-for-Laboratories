@@ -81,7 +81,8 @@ function InputForm({ setResults }) {
 
   return (
     <div className="input-form-container">
-      <h2>Prediction Form</h2>
+      <h3 className="fw-bold mb-2 text-uppercase">C A R D I O C A R E <span className='cardio-care'>+</span></h3>
+      <h2 className='text-center'>Prediction Form</h2>
       <div className="row">
         <div className="col-md-6">
           <form onSubmit={handleSubmit} className="input-form">

@@ -1,1 +1,28 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center; /* Center align text in table */
+  border-radius: 10px; /* Increase border radius */
+  overflow: hidden; /* Ensure border radius is applied correctly */
+}
+
+.pdf {
+  width: 100px;
+  margin: 5px;
+}
+
+h3, .report {
+  color: white; /* Set color of h3 and .report to white */
+}
+
+.pdf{
+  width: 100px;
+  margin: 5px;
+}
+h3{
+  color: white;
+}
+.report{
+  color: white;
+}
 

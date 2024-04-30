@@ -70,6 +70,22 @@ app.post('/login', async (req, res) => {
     }
 });
 
+
+// Add a route to fetch the count of reports
+// Add this route to your Express server
+app.get('/patient-count', async (req, res) => {
+    try {
+      const patientsSnapshot = await db.collection('patients').get();
+      const count = patientsSnapshot.size;
+      res.status(200).json({ count });
+    } catch (error) {
+      console.error('Error fetching patient count:', error);
+      res.status(500).json({ message: 'Failed to fetch patient count' });
+    }
+  });
+  
+
+
 app.post('/patient-details', async (req, res) => {
     try {
       // Assuming you have a patients collection in your Firestore
@@ -96,6 +112,22 @@ app.get('/all-patient-details', async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch patient details' });
     }
 });
+
+app.delete('/patients/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // Delete the patient with the given ID
+        await db.collection('patients').doc(id).delete();
+
+        res.status(200).json({ message: 'Patient deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting patient:', error);
+        res.status(500).json({ message: 'Failed to delete patient' });
+    }
+});
+
+
 
 
 
