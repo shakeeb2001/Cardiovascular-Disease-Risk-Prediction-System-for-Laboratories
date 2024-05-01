@@ -46,6 +46,20 @@ function Report() {
       // Handle error state here if needed
     }
   };
+  
+  const handleApprove = async (id) => {
+    // Implement the approve functionality here
+    // This function will only be called by the lab manager
+    // You can make a POST request to your backend to update the patient status to approved
+    try {
+      // Example:
+      // await axios.post(`http://127.0.0.1:4000/patients/${id}/approve`);
+    } catch (error) {
+      console.error('Error approving patient:', error);
+    }
+  };
+
+  
 
   const getRiskPercentageColor = (riskLevel) => {
     if (riskLevel > 75) {
@@ -109,8 +123,11 @@ function Report() {
                   <td className={getResultColor(patient.result)}>{patient.result}</td>
                   <td className={getStressLevelColor(patient.stress_level)}>{patient.stress_level}</td>
                   <td className="actions">
-                    <Button className="pdf" variant="danger" onClick={() => handleDelete(patient.id)}>Delete</Button>
-                    <Button className="pdf" variant="warning" onClick={() => handleViewPDF(patient)}>PDF</Button>
+                    <Button variant="danger" onClick={() => handleDelete(patient.id)}>Delete</Button>
+                    <Button variant="warning" onClick={() => handleViewPDF(patient)}>PDF</Button>
+                    {patient.role === 'manager' && (
+                      <Button variant="success" onClick={() => handleApprove(patient.id)}>Approve</Button>
+                    )}
                   </td>
                 </tr>
               ))}

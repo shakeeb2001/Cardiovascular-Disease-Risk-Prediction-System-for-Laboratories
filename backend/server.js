@@ -1,6 +1,10 @@
 const express = require('express');
 const admin = require("firebase-admin");
 const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 const credential = require("./key.json");
 
 admin.initializeApp({
@@ -14,61 +18,89 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Register route
-app.post('/register', async (req, res) => {
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/register', upload.single('profilePic'), async (req, res) => {
     try {
-        const { name, email, username, password } = req.body;
+        const { name, mobileNumber, address, email, username, password, userRole } = req.body;
+        const profilePic = req.file;
 
-        // Create user in Firebase Authentication
-        const userRecord = await admin.auth().createUser({
-            email,
-            password,
-            displayName: name,
-        });
+        // If profilePic is uploaded, store the URL, otherwise, set it to null
+        let profilePicUrl = null;
+        if (profilePic) {
+            profilePicUrl = `/uploads/${profilePic.filename}`;
+        }
 
-        // Save additional user data to Firestore
-        await db.collection('labAssistants').doc(username).set({
+        // Save user profile data to Firestore
+        await db.collection(userRole === 'assistant' ? 'labAssistants' : 'labManagers').doc(username).set({
             name,
+            mobileNumber,
+            address,
             email,
             username,
-            uid: userRecord.uid,
+            password,
+            userRole,
+            profilePicUrl
         });
 
-        res.status(200).json({ message: 'Registration successful' });
-
+        res.status(200).json({ message: 'User registered successfully' });
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({ message: 'Registration failed' });
     }
 });
 
-// Login route
-
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        // Retrieve user data from Firestore using the username
-        const userSnapshot = await db.collection('labAssistants').doc(username).get();
+        // Retrieve user data from Firestore using the username from both collections
+        const assistantSnapshot = await db.collection('labAssistants').doc(username).get();
+        const managerSnapshot = await db.collection('labManagers').doc(username).get();
 
-        if (!userSnapshot.exists) {
+        let userData = null;
+        let userRole = null;
+
+        // Check if user exists in assistants collection
+        if (assistantSnapshot.exists) {
+            userData = assistantSnapshot.data();
+            userRole = 'assistant';
+        }
+        // Check if user exists in managers collection
+        else if (managerSnapshot.exists) {
+            userData = managerSnapshot.data();
+            userRole = 'manager';
+        }
+        // If user does not exist in any collection, return invalid credentials
+        else {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
-
-        const userData = userSnapshot.data();
 
         // Compare plaintext password
         if (password !== userData.password) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({ message: 'Login successful', userRole });
 
     } catch (error) {
         console.error('Error logging in user:', error);
         res.status(500).json({ message: 'Login failed' });
     }
 });
+
+
+
 
 
 // Add a route to fetch the count of reports
