@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
-import './SettingPage.css'; // Import the CSS file for styling
-import UserProfileCreation from '../accoutCreatatingFrom/AcFrom'; // Import the UserProfileCreation component
-import Profile from './Profile'; // Import the Profile component
+import { useNavigate } from 'react-router-dom'; 
+import './SettingPage.css'; 
+import UserProfileCreation from '../accoutCreatatingFrom/AcFrom'; 
+import Profile from './Profile'; 
+import UserProfiles from './UserProfiles'; 
 
 const Settings = ({ loggedInUsername, userRole }) => {
   const [activeTab, setActiveTab] = useState("profile");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      localStorage.clear();
+      // Navigate to login page
+      navigate('/login');
+    }
   };
 
   return (
@@ -22,42 +34,43 @@ const Settings = ({ loggedInUsername, userRole }) => {
               <i className="zmdi zmdi-view-dashboard"></i> Profile
             </a>
           </li>
-          {userRole === "manager" && ( // Render "Analysis Report" tab only for managers
+          {userRole === "manager" && (
             <li>
               <a href="#" onClick={() => handleTabClick("report")}>
                 <i className="zmdi zmdi-link"></i> Analysis Report
               </a>
             </li>
           )}
-          {userRole === "manager" && ( // Render "User Profile Creation" tab only for managers
+          {userRole === "manager" && (
             <li>
               <a href="#" onClick={() => handleTabClick("creation")}>
-                <i className="zmdi zmdi-widgets"></i> User Profile Creation
+                <i className="zmdi zmdi-widgets"></i> User Creation
               </a>
             </li>
           )}
+          <li>
+            <a href="#" onClick={() => handleTabClick("userProfiles")}>
+              <i className="zmdi zmdi-account"></i> User Profiles
+            </a>
+          </li>
+          <li>
+            <a href="#" onClick={handleLogout}>
+              <i className="zmdi zmdi-power"></i> Logout
+            </a>
+          </li>
           <li>
             <a href="#">
               <i className="zmdi zmdi-info-outline"></i> About
             </a>
           </li>
-          <li></li>
-          <li></li>
         </ul>
       </div>
       {/* Content */}
       <div id="content">
-        <nav className="navbar navbar-default">
-          <div className="container-fluid">
-            <ul className="nav navbar-nav navbar-right">
-              <li>
-                <a href="#"><i className="zmdi zmdi-notifications text-danger"></i></a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-        {activeTab === "creation" && userRole === "manager" && <UserProfileCreation username={loggedInUsername} />}
         {activeTab === "profile" && <Profile username={loggedInUsername} />}
+        {activeTab === "report" && userRole === "manager" && <div>Analysis Report</div>}
+        {activeTab === "creation" && userRole === "manager" && <UserProfileCreation username={loggedInUsername} />}
+        {activeTab === "userProfiles" && userRole === "manager" && <UserProfiles />}
       </div>
     </div>
   );

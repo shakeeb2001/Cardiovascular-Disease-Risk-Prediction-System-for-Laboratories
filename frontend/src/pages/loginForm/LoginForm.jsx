@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 function LoginForm({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // State variable to track loading status
-  const [error, setError] = useState(null); // State variable to store error message
+  const [isLoading, setIsLoading] = useState(false); 
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    setIsLoading(true); // Set loading to true when login process starts
-    setError(null); // Clear any previous error messages
+    setIsLoading(true); 
+    setError(null); 
     try {
       const response = await fetch('http://localhost:4000/login', {
         method: 'POST',

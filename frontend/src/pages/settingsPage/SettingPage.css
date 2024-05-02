@@ -1,17 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
 
 body {
-
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
 }
 
-.setting-title{
-    font-size: large;
-    color: #fff;
-    padding-left: 40px;
+.setting-title {
+  font-size: large;
+  color: #fff;
+  padding-left: 40px;
 }
-
 
 /* Toggle Styles */
 
@@ -33,14 +31,14 @@ body {
 
 #sidebar {
   z-index: 1000;
-
   position: fixed;
   left: 250px;
-  width: 250px;
+  width: 260px;
   height: 100%;
   margin-left: -250px;
   overflow-y: auto;
-  background: #f2f2f2;
+  background: rgb(30, 50, 48);
+  color: #fff;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -48,7 +46,7 @@ body {
 }
 
 #sidebar header {
-  background-color: #4b4a4a;
+  background-color: rgb(40, 68, 65);
   font-size: 20px;
   line-height: 52px;
   text-align: center;
@@ -64,24 +62,47 @@ body {
   color: #fff;
 }
 
-#sidebar .nav{
-  
+#sidebar .nav {
 }
 
-#sidebar .nav a{
+#sidebar .nav a {
   background: none;
-  color: #067d4c;
-  font-size: 20px;
+  color: #ffffff;
+  font-size: 23px;
   padding: 16px 24px;
   line-height: 80px;
   text-decoration: none;
 }
 
-#sidebar .nav a:hover{
+#sidebar .nav a:hover {
   background: none;
-  color: #044329;
+  color: #fff;
 }
 
-#sidebar .nav a i{
+#sidebar .nav a i {
   margin-right: 16px;
 }
+
+/* Logout Tab */
+#sidebar .logout-tab {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 16px 24px;
+  text-align: center;
+}
+
+#sidebar .logout-tab a {
+  background: none;
+  color: #ffffff;
+  font-size: 23px;
+  line-height: normal;
+  text-decoration: none;
+}
+
+#sidebar .logout-tab a:hover {
+  background: none;
+  color: #fff;
+}
+
+

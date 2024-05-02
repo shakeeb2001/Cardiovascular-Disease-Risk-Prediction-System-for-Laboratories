@@ -73,7 +73,6 @@ app.get('/register/:username', async (req, res) => {
             userData = await db.collection('labManagers').doc(username).get();
         }
 
-        // If user data doesn't exist in any collection, return not found
         if (!userData.exists) {
             return res.status(404).json({ error: 'User not found' });
         }
@@ -97,36 +96,59 @@ app.get('/register/:username', async (req, res) => {
     }
 });
 
-// app.get('/register/:username', async (req, res) => {
-//     const { username } = req.params;
+// Add a route to fetch all user profiles
+app.get('/user-profiles', async (req, res) => {
+    try {
+        // Retrieve all user profiles from Firestore
+        const assistantsSnapshot = await db.collection('labAssistants').get();
+        const managersSnapshot = await db.collection('labManagers').get();
 
-//     try {
-//         // Fetch user data from your database using the username
-//         let userData;
-//         // Assuming you have a function to retrieve user data by username from your database
-//         userData = await getUserByUsername(username);
+        // Combine user profiles from both collections
+        const assistants = assistantsSnapshot.docs.map(doc => doc.data());
+        const managers = managersSnapshot.docs.map(doc => doc.data());
+        const userProfiles = [...assistants, ...managers];
 
-//         if (userData) {
-//             res.json({
-//                 name: userData.name,
-//                 mobileNumber: userData.mobileNumber,
-//                 address: userData.address,
-//                 email: userData.email,
-//                 username: userData.username,
-//                 userRole: userData.userRole,
-//                 // Note: It's not recommended to send the password to the client
-//             });
-//         } else {
-//             res.status(404).json({ error: 'User not found' });
-//         }
-//     } catch (error) {
-//         console.error('Error fetching user data:', error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
-// });
+        res.status(200).json(userProfiles);
+    } catch (error) {
+        console.error('Error fetching user profiles:', error);
+        res.status(500).json({ message: 'Failed to fetch user profiles' });
+    }
+});
 
-
-
+// Update user profile route
+app.put('/user-profiles/:username', async (req, res) => {
+    try {
+      const { username } = req.params;
+      const updatedUserData = req.body;
+  
+      // Update user profile in Firestore
+      const collectionName = updatedUserData.userRole === 'assistant' ? 'labAssistants' : 'labManagers';
+      await db.collection(collectionName).doc(username).set(updatedUserData);
+  
+      res.status(200).json({ message: 'User updated successfully' });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ message: 'Failed to update user' });
+    }
+  });
+  
+  
+  // Delete user profile route
+  app.delete('/user-profiles/:username', async (req, res) => {
+    try {
+      const { username } = req.params;
+  
+      // Delete user profile from Firestore
+      await db.collection('labAssistants').doc(username).delete();
+      await db.collection('labManagers').doc(username).delete();
+  
+      res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      res.status(500).json({ message: 'Failed to delete user' });
+    }
+  });
+  
 
 
 
