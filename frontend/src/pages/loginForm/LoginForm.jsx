@@ -3,7 +3,7 @@ import './LoginForm.css';
 import { Button, Container, Row, Col, Card, Form, Spinner, Modal } from 'react-bootstrap'; // Import Modal component
 import { useNavigate } from 'react-router-dom';
 
-function LoginForm() {
+function LoginForm({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false); // State variable to track loading status
@@ -21,10 +21,15 @@ function LoginForm() {
         },
         body: JSON.stringify({ username, password }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.status === 200) {
+        // Store the username and userRole in local storage
+        localStorage.setItem('username', username);
+        localStorage.setItem('userRole', data.userRole);
+        // Call the onLogin function passed as prop
+        onLogin(username, data.userRole);
         navigate('/');
       } else {
         setError(data.message); // Set error message when login fails
@@ -36,6 +41,10 @@ function LoginForm() {
       setIsLoading(false); // Set loading to false when login process finishes
     }
   };
+  
+  
+  
+  
 
   const handleCloseErrorModal = () => {
     setError(null); // Close the error modal
@@ -101,4 +110,3 @@ function LoginForm() {
 }
 
 export default LoginForm;
-

@@ -60,6 +60,76 @@ app.post('/register', upload.single('profilePic'), async (req, res) => {
     }
 });
 
+
+app.get('/register/:username', async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        // Check if the user exists in labAssistants collection
+        let userData = await db.collection('labAssistants').doc(username).get();
+
+        // If user doesn't exist in labAssistants, check in labManagers collection
+        if (!userData.exists) {
+            userData = await db.collection('labManagers').doc(username).get();
+        }
+
+        // If user data doesn't exist in any collection, return not found
+        if (!userData.exists) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Retrieve user data
+        const userDataObject = userData.data();
+
+        res.status(200).json({
+            name: userDataObject.name,
+            mobileNumber: userDataObject.mobileNumber,
+            address: userDataObject.address,
+            email: userDataObject.email,
+            username: userDataObject.username,
+            userRole: userDataObject.userRole,
+            profilePicUrl: userDataObject.profilePicUrl
+        });
+        
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+// app.get('/register/:username', async (req, res) => {
+//     const { username } = req.params;
+
+//     try {
+//         // Fetch user data from your database using the username
+//         let userData;
+//         // Assuming you have a function to retrieve user data by username from your database
+//         userData = await getUserByUsername(username);
+
+//         if (userData) {
+//             res.json({
+//                 name: userData.name,
+//                 mobileNumber: userData.mobileNumber,
+//                 address: userData.address,
+//                 email: userData.email,
+//                 username: userData.username,
+//                 userRole: userData.userRole,
+//                 // Note: It's not recommended to send the password to the client
+//             });
+//         } else {
+//             res.status(404).json({ error: 'User not found' });
+//         }
+//     } catch (error) {
+//         console.error('Error fetching user data:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
+
+
+
+
+
+
 app.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -98,9 +168,6 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Login failed' });
     }
 });
-
-
-
 
 
 // Add a route to fetch the count of reports
