@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import './SettingPage.css'; 
 import UserProfileCreation from '../accoutCreatatingFrom/AcFrom'; 
 import Profile from './Profile'; 
 import UserProfiles from './UserProfiles'; 
 
-const Settings = ({ loggedInUsername, userRole }) => {
+const Settings = ({ loggedInUsername }) => {
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || ''); 
   const [activeTab, setActiveTab] = useState("profile");
   const navigate = useNavigate(); // Initialize useNavigate
 
+  useEffect(() => {
+    // Save userRole to local storage whenever it changes
+    localStorage.setItem('userRole', userRole);
+    const storedUserRole = localStorage.getItem('userRole');
+    if (storedUserRole) {
+      setUserRole(storedUserRole);
+    }
+  }, [userRole]); // Add userRole to dependencies to update activeTab when userRole changes
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    // Store active tab in localStorage if user is a manager
+    if (userRole === "manager") {
+      localStorage.setItem("activeTab", tab);
+    }
   };
 
   const handleLogout = () => {
@@ -25,34 +39,33 @@ const Settings = ({ loggedInUsername, userRole }) => {
   return (
     <div id="viewport">
       <div id="sidebar">
-        <header>
-          <h4 className="fw-bold mb-2 text-uppercase setting-title">C A R D I O C A R E <span className='cardio-care cario-span'>+</span></h4>
-        </header>
         <ul className="nav">
           <li>
-            <a href="#" onClick={() => handleTabClick("profile")}>
+            <a href="#" className={activeTab === "profile" ? "active" : ""} onClick={() => handleTabClick("profile")}>
               <i className="zmdi zmdi-view-dashboard"></i> Profile
             </a>
           </li>
           {userRole === "manager" && (
             <li>
-              <a href="#" onClick={() => handleTabClick("report")}>
+              <a href="#" className={activeTab === "report" ? "active" : ""} onClick={() => handleTabClick("report")}>
                 <i className="zmdi zmdi-link"></i> Analysis Report
               </a>
             </li>
           )}
           {userRole === "manager" && (
             <li>
-              <a href="#" onClick={() => handleTabClick("creation")}>
+              <a href="#" className={activeTab === "creation" ? "active" : ""} onClick={() => handleTabClick("creation")}>
                 <i className="zmdi zmdi-widgets"></i> User Creation
               </a>
             </li>
           )}
-          <li>
-            <a href="#" onClick={() => handleTabClick("userProfiles")}>
-              <i className="zmdi zmdi-account"></i> User Profiles
-            </a>
-          </li>
+          {userRole === "manager" && (
+            <li>
+              <a href="#" className={activeTab === "userProfiles" ? "active" : ""} onClick={() => handleTabClick("userProfiles")}>
+                <i className="zmdi zmdi-account"></i> User Profiles
+              </a>
+            </li>
+          )}
           <li>
             <a href="#" onClick={handleLogout}>
               <i className="zmdi zmdi-power"></i> Logout

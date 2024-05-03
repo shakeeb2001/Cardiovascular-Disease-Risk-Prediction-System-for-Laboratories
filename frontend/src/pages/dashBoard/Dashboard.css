@@ -1,5 +1,12 @@
-.dash-class{
+
+body {
     overflow: hidden;
+    padding-top: 90px;
+
+  }
+
+.dash-class{
+
     color: rgb(11, 74, 65);
     
 }

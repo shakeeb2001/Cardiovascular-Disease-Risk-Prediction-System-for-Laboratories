@@ -28,7 +28,6 @@ const Chat = () => {
 
   return (
     <div className="container py-5 ">
-       <h3 className="fw-bold mb-2 text-uppercase">C A R D I O C A R E <span className='cardio-care'>+</span></h3>
        <br />
       <header className="text-center">
         {/* Header content */}

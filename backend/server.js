@@ -17,6 +17,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static('uploads'));
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -50,7 +51,7 @@ app.post('/register', upload.single('profilePic'), async (req, res) => {
             username,
             password,
             userRole,
-            profilePicUrl
+            profilePicUrl // Save the profile picture URL
         });
 
         res.status(200).json({ message: 'User registered successfully' });
@@ -59,6 +60,7 @@ app.post('/register', upload.single('profilePic'), async (req, res) => {
         res.status(500).json({ message: 'Registration failed' });
     }
 });
+
 
 
 app.get('/register/:username', async (req, res) => {

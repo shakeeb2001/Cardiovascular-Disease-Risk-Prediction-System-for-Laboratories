@@ -1,4 +1,11 @@
+.profile-pic{
+    padding-left: 120px;
+}
 
+
+.container{
+    width: 80%;
+}
 
 .border-0 {
     border: 0!important;
@@ -35,7 +42,7 @@ section {
     color: #ceaa4d !important;
 }
 .text-secondary {
-    color: #15395A !important;
+    color: rgb(30, 50, 48)!important;
 }
 .font-weight-600 {
     font-weight: 600;
@@ -64,7 +71,7 @@ section {
 }
 
 .bg-secondary {
-    background: #15395A !important;
+    background: rgb(30, 50, 48) !important;
 }
 @media screen and (min-width: 576px){
     .pe-sm-6, .px-sm-6 {

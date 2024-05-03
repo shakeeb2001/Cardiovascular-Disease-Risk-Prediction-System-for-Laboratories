@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 
@@ -24,40 +26,17 @@ const UserProfile = () => {
     }
   };
 
-  const handleUpdate = async (user) => {
-    try {
-      const response = await fetch(`http://localhost:4000/user-profiles/${user.username}`);
-      if (response.ok) {
-        const userData = await response.json();
-        setUpdatedUser(userData);
-        setShowModal(true);
-      } else {
-        console.error('Failed to fetch user data');
-      }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
+  const handleUpdate = (user) => {
+    setUpdatedUser(user);
+    setShowModal(true);
   };
 
   const handleSave = async () => {
-    try {
-      const response = await fetch(`http://localhost:4000/user-profiles/${updatedUser.username}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedUser),
-      });
-      if (response.ok) {
-        console.log('User updated successfully');
-        setShowModal(false);
-        fetchUserProfiles();
-      } else {
-        console.error('Failed to update user');
-      }
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
+    // Implement saving updated user data
+    console.log('Updated user:', updatedUser);
+    setShowModal(false);
+    // You may want to refresh the user profiles after updating
+    fetchUserProfiles();
   };
 
   const handleClose = () => {
@@ -71,6 +50,7 @@ const UserProfile = () => {
       });
       if (response.ok) {
         console.log('User deleted successfully');
+        // You may want to refresh the user profiles after deleting
         fetchUserProfiles();
       } else {
         console.error('Failed to delete user');
@@ -78,11 +58,6 @@ const UserProfile = () => {
     } catch (error) {
       console.error('Error deleting user:', error);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUpdatedUser({ ...updatedUser, [name]: value });
   };
 
   return (
@@ -120,43 +95,20 @@ const UserProfile = () => {
         </tbody>
       </table>
 
+      {/* Update User Modal */}
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Update User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
+            {/* Add form fields for updating user data */}
+            {/* Example:
             <Form.Group controlId="formName">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" placeholder="Enter name" name="name" value={updatedUser ? updatedUser.name : ''} onChange={handleChange} />
+              <Form.Control type="text" placeholder="Enter name" value={updatedUser ? updatedUser.name : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })} />
             </Form.Group>
-            <Form.Group controlId="formEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" name="email" value={updatedUser ? updatedUser.email : ''} onChange={handleChange} />
-            </Form.Group>
-            <Form.Group controlId="formMobileNumber">
-              <Form.Label>Mobile Number</Form.Label>
-              <Form.Control type="text" placeholder="Enter mobile number" name="mobileNumber" value={updatedUser ? updatedUser.mobileNumber : ''} onChange={handleChange} />
-            </Form.Group>
-            <Form.Group controlId="formAddress">
-              <Form.Label>Address</Form.Label>
-              <Form.Control type="text" placeholder="Enter address" name="address" value={updatedUser ? updatedUser.address : ''} onChange={handleChange} />
-            </Form.Group>
-            <Form.Group controlId="formUserRole">
-              <Form.Label>User Role</Form.Label>
-              <Form.Control as="select" name="userRole" value={updatedUser ? updatedUser.userRole : ''} onChange={handleChange}>
-                <option value="manager">Manager</option>
-                <option value="assistant">Assistant</option>
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="formUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" name="username" value={updatedUser ? updatedUser.username : ''} onChange={handleChange} />
-            </Form.Group>
-            <Form.Group controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Enter password" name="password" value={updatedUser ? updatedUser.password : ''} onChange={handleChange} />
-            </Form.Group>
+            */}
           </Form>
         </Modal.Body>
         <Modal.Footer>

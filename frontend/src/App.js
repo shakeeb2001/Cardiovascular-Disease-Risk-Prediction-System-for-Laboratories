@@ -1,6 +1,8 @@
 import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//import NewLog from './pages/temp/newLog'
+import Navbar from './components/Navbar';
 import LoginHome from './pages/loginForm/LoginHome';
 import Settings from './pages/settingsPage/SettingPage';
 import Communication from './pages/communication/Communication';
@@ -26,7 +28,9 @@ function App() {
 
   return (
     <Router>
+      <Navbar/>
     <Routes>
+     
       <Route path="/home" element={<LoginHome />} />
       <Route path="/" element={<Dashboard username={loggedInUsername} userRole={userRole} />} />
       <Route path="/reports" element={<Reports userRole={userRole} /> } />
@@ -34,6 +38,7 @@ function App() {
       <Route path="/communication" element={<Communication userRole={userRole} />} />
       <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
       <Route path="/signout" element={<SignOutForm />} />
+      {/* <Route path="/newlog" element={<NewLog />} /> */}
       <Route path="/prediction" element={<InputForm setResults={setResults} userRole={userRole} />} />
       <Route path="/result" element={<Result results={results} userRole={userRole} />} />
       <Route path="/report" element={<ReportPage userRole={userRole} />} /> 

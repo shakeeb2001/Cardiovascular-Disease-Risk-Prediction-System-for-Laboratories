@@ -122,7 +122,7 @@ function Report() {
   return (
     <div className="container mt-3 ">
       <LoadingModal show={isLoading} /> {/* Render the LoadingModal component */}
-      <h3 className="fw-bold mb-2 text-uppercase">C A R D I O C A R E <span className='cardio-care'>+</span></h3>
+     
       <h2 className="text-center report">Patients Report</h2>
       <div className="mt-3">
         {error ? (

@@ -6,10 +6,20 @@ import './Dashboard.css';
 
 const Dashboard = () => {
   const [patientCount, setPatientCount] = useState(0);
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || ''); 
 
   useEffect(() => {
     fetchPatientCount();
   }, []);
+
+  useEffect(() => {
+    // Save userRole to local storage whenever it changes
+    localStorage.setItem('userRole', userRole);
+    const storedUserRole = localStorage.getItem('userRole');
+    if (storedUserRole) {
+      setUserRole(storedUserRole);
+    }
+  }, [userRole]); 
 
   const fetchPatientCount = async () => {
     try {
@@ -32,7 +42,6 @@ const Dashboard = () => {
   return (
     <div className='dash-class' style={backgroundImageStyle}>
       <Container className="mt-5">
-        <h1 className="text-left mb-4">Dashboard</h1>
         <Row className="justify-content-center">
           <Col md={3} className="mb-4">
             <Card as={Link} to="/prediction" className="text-center dashboard-card-link">
