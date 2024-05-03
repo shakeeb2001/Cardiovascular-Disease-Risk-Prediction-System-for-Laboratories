@@ -3,7 +3,7 @@ import './LoginForm.css';
 import { Button, Container, Row, Col, Card, Form, Spinner, Modal } from 'react-bootstrap'; // Import Modal component
 import { useNavigate } from 'react-router-dom';
 
-function LoginForm({ onLogin }) {
+function LoginForm({ onLogin, updateNavbar }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false); 
@@ -31,6 +31,7 @@ function LoginForm({ onLogin }) {
         // Call the onLogin function passed as prop
         onLogin(username, data.userRole);
         navigate('/');
+        updateNavbar(data.userData);
       } else {
         setError(data.message); // Set error message when login fails
       }
@@ -54,7 +55,7 @@ function LoginForm({ onLogin }) {
     <Container fluid className='h-100'>
       <Row className='justify-content-center align-items-center h-100'>
         <Col xs={12}>
-          <Card className='text-white my-5 mx-auto login-form' style={{ borderRadius: '1rem', maxWidth: '400px' }}>
+          <Card className='text-white my-5 mx-auto login-form' style={{ borderRadius: '1rem', maxWidth: '800px',maxHeight: '500px' }}>
             <Card.Body className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
               <h3 className="fw-bold mb-2 text-uppercase">C A R D I O C A R E <span className='cardio-care'>+</span></h3>
               <p className="text-white-50 mb-5">Please enter your login and password!</p>

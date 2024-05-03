@@ -14,10 +14,12 @@
 }
 
 .login-form {
-    top: 150px;
+    top: 60px;
+    left: 30px;
     background-color: rgb(23, 141, 126);
     color: white;
     border: none;
+    padding-left: 350px;
 }
 
 .login-button {
@@ -38,6 +40,7 @@
     color: white;
     border-color: white;
     border-radius: 0.5rem;
+
 }
 
 .form-control:focus {

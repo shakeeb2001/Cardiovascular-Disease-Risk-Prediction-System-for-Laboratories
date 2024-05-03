@@ -6,6 +6,7 @@ import Profile from './Profile';
 import UserProfiles from './UserProfiles'; 
 
 const Settings = ({ loggedInUsername }) => {
+  const [userData, setUserData] = useState(null);
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || ''); 
   const [activeTab, setActiveTab] = useState("profile");
   const navigate = useNavigate(); // Initialize useNavigate
@@ -31,6 +32,7 @@ const Settings = ({ loggedInUsername }) => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     if (confirmLogout) {
       localStorage.clear();
+      setUserData(null); // Clear user data
       // Navigate to login page
       navigate('/login');
     }
@@ -39,6 +41,7 @@ const Settings = ({ loggedInUsername }) => {
   return (
     <div id="viewport">
       <div id="sidebar">
+  
         <ul className="nav">
           <li>
             <a href="#" className={activeTab === "profile" ? "active" : ""} onClick={() => handleTabClick("profile")}>
