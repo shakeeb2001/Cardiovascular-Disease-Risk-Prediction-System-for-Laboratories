@@ -1,22 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ChatBox.css'; // Import the CSS file
 
-const Chat = () => {
+const Chat = ({ loggedInUsername }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null); // State to track selected user
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || '');
+  const [users, setUsers] = useState([]);
+  const [ws, setWs] = useState(null);
+  const [notification, setNotification] = useState('');
 
-  // Dummy data for available users
-  const availableUsers = [
-    { id: 1, name: 'User 1' },
-    { id: 2, name: 'User 2' },
-  ];
+  // Fetch all user profiles
+  useEffect(() => {
+    fetchUserProfiles();
+    connectWebSocket();
+  }, []);
 
-  // Function to handle sending a message
+  const fetchUserProfiles = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:4000/user-profiles');
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error fetching user profiles:', error);
+    }
+  };
+
+  // Connect to WebSocket server
+  const connectWebSocket = () => {
+    const ws = new WebSocket('ws://127.0.0.1:4001');
+
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+      setWs(ws);
+    };
+
+    ws.onmessage = (event) => {
+      const receivedMessage = JSON.parse(event.data);
+      setMessages([...messages, receivedMessage]);
+      // Check if notification is needed
+      if ((userRole === 'manager' && receivedMessage.sender === 'assistant') ||
+          (userRole === 'assistant' && receivedMessage.sender === 'manager')) {
+        setNotification(`New message from ${receivedMessage.sender}: ${receivedMessage.message}`);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket disconnected');
+      // Attempt to reconnect after a short delay
+      setTimeout(connectWebSocket, 3000);
+    };
+  };
+
   const sendMessage = (e) => {
     e.preventDefault();
-    if (message.trim() !== '' && selectedUser) {
-      setMessages([...messages, { sender: 'user1', receiver: selectedUser.id, message }]);
+    if (message.trim() !== '' && selectedUser && ws) {
+      const newMessage = { sender: userRole, receiver: selectedUser.username, message };
+      const jsonString = JSON.stringify(newMessage); // Stringify the message
+      ws.send(jsonString);
+      setMessages([...messages, newMessage]);
       setMessage('');
     }
   };
@@ -26,30 +68,40 @@ const Chat = () => {
     setSelectedUser(user);
   };
 
+  // Filter users based on the logged-in user's role
+  const filteredUsers = users.filter(user => {
+    if (userRole === 'manager') {
+      return user.userRole === 'assistant';
+    } else if (userRole === 'assistant') {
+      return user.userRole === 'manager';
+    }
+    return false;
+  });
+
   return (
     <div className="container py-5 ">
-       <br />
+      <br />
       <header className="text-center">
         {/* Header content */}
       </header>
       <div className="row rounded-lg overflow-hidden shadow chat-container">
         {/* Users box*/}
-        <div className="col-3 px-0 "> {/* Adjusted width */}
-          {/* Render available users */}
+        <div className="col-3 px-0 ">
+          {/* Render available users based on user's role */}
           <div className="bg-light">
             <div className="bg-gray px-4 py-2 bg-light">
-              <p className="h5 mb-0 py-1">Available Assistants</p>
+              <p className="h5 mb-0 py-1">Available {userRole === 'manager' ? 'Assistants' : 'Managers'}</p>
             </div>
             <div className="messages-box">
               <div className="list-group rounded-0">
-                {availableUsers.map(user => (
+                {filteredUsers.map(user => (
                   <a
-                    key={user.id}
+                    key={user.username}
                     href="#"
                     className={`list-group-item list-group-item-action list-group-item-light rounded-0 ${
-                      selectedUser && selectedUser.id === user.id ? 'active' : ''
+                      selectedUser && selectedUser.username === user.username ? 'active' : ''
                     }`}
-                    onClick={() => handleUserClick(user)} // Handle user click
+                    onClick={() => handleUserClick(user)}
                   >
                     {user.name}
                   </a>
@@ -59,29 +111,31 @@ const Chat = () => {
           </div>
         </div>
         {/* Chat Box*/}
-        <div className="col-9 px-0"> {/* Adjusted width */}
+        <div className="col-9 px-0">
           <div className="px-4 py-5 chat-box bg-light">
-            {/* Render messages */}
             {selectedUser && (
               <div className="text-center">
                 <h4>{selectedUser.name}</h4>
               </div>
             )}
             {messages.map((msg, index) => {
-              // Only render messages sent to the selected user
-              if (selectedUser && msg.receiver === selectedUser.id) {
+              if ((msg.sender === userRole && msg.receiver === selectedUser.username) ||
+                  (msg.sender === selectedUser.username && msg.receiver === userRole)) {
                 return (
-                  <div key={index} className={`media w-50 mb-3 ${msg.sender === 'user1' ? 'ml-auto' : ''}`}>
-                    <div className={`media-body ${msg.sender === 'user1' ? 'text-right' : ''}`}>
-                      <div className={`bg-${msg.sender === 'user1' ? 'primary' : 'light'} rounded py-2 px-3 mb-2`}>
-                        <p className={`text-small mb-0 text-${msg.sender === 'user1' ? 'white' : 'black'}`}>{msg.message}</p>
+                  <div key={index} className={`media w-50 mb-3 ${msg.sender === userRole ? 'ml-auto' : ''}`}>
+                    <div className={`media-body ${msg.sender === userRole ? 'text-right' : ''}`}>
+                      <div className={`bg-${msg.sender === userRole ? 'primary' : 'light'} rounded py-2 px-3 mb-2`}>
+                        <p className={`text-small mb-0 text-${msg.sender === userRole ? 'white' : 'black'}`}>
+                          {msg.sender === 'manager' ? 'Manager: ' : 'Assistant: '} {msg.message}
+                        </p>
                       </div>
                     </div>
                   </div>
                 );
               }
-              return null; // If message not sent to selected user, don't render
+              return null;
             })}
+            {notification && <div className="notification">{notification}</div>}
           </div>
           {/* Typing area */}
           <form onSubmit={sendMessage} className="bg-light ">

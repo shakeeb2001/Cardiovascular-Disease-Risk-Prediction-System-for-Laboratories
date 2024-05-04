@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import DashboardBackgroundImage from '../images/LabBackground.jpeg';
+import RiskChart from './RiskChart';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -31,17 +32,9 @@ const Dashboard = () => {
     }
   };
 
-  const backgroundImageStyle = {
-    backgroundImage: `url(${DashboardBackgroundImage})`,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    minHeight: '100vh',
-    opacity: 0.9
-  };
 
   return (
-    <div className='dash-class' >
+    <div className='dash-class'>
       <Container className="mt-5">
         <Row className="justify-content-center">
           <Col md={3} className="mb-4">
@@ -78,6 +71,12 @@ const Dashboard = () => {
                 <Card.Title>Settings</Card.Title>
               </Card.Body>
             </Card>
+          </Col>
+        </Row>
+        {/* Render RiskChart component here */}
+        <Row className="justify-content-center">
+          <Col md={8} className="mb-4">
+            <RiskChart />
           </Col>
         </Row>
       </Container>

@@ -10,6 +10,7 @@ function InputForm({ setResults }) {
     email: 'ahamed@gmail.com',
     sex: '1',
     age: '34',
+    date:'2023-04-16',
     height: '180',
     weight: '80',
     currentSmoker: '1',
@@ -113,6 +114,11 @@ function InputForm({ setResults }) {
             <div className="form-group">
               <label>Age:</label>
               <input type="number" name="age" value={formData.age} onChange={handleChange} className="form-control" min="0" required />
+            </div>
+
+            <div className="form-group">
+               <label>Date:</label>
+               <input type="date" name="date" value={formData.date} onChange={handleChange} className="form-control" required />
             </div>
 
             <div className="form-group">

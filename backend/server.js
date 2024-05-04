@@ -236,19 +236,79 @@ app.get('/all-patient-details', async (req, res) => {
     }
 });
 
-app.delete('/patients/:id', async (req, res) => {
+// Inside your Express server
+
+// Other server setup code...
+
+// Delete patient by national ID route
+app.delete('/patients/:nationalid', async (req, res) => {
     try {
-        const id = req.params.id;
+        const nationalid = req.params.nationalid;
 
-        // Delete the patient with the given ID
-        await db.collection('patients').doc(id).delete();
+        // Query the Firestore collection to find the patient with the given national ID
+        const querySnapshot = await db.collection('patients').where('nationalid', '==', nationalid).get();
 
-        res.status(200).json({ message: 'Patient deleted successfully' });
+        // Check if a patient with the given national ID exists
+        if (querySnapshot.empty) {
+            return res.status(404).json({ message: 'Patient not found' });
+        }
+
+        // Delete the patient record(s) with the given national ID
+        const deletePromises = [];
+        querySnapshot.forEach(doc => {
+            deletePromises.push(doc.ref.delete());
+        });
+        await Promise.all(deletePromises);
+
+        res.status(200).json({ message: 'Patient record deleted successfully' });
     } catch (error) {
         console.error('Error deleting patient:', error);
-        res.status(500).json({ message: 'Failed to delete patient' });
+        res.status(500).json({ message: 'Failed to delete patient record' });
     }
 });
+
+
+
+app.get('/risk-percentage', async (req, res) => {
+    try {
+        const patientsSnapshot = await db.collection('patients').get();
+        const riskData = {};
+
+        patientsSnapshot.forEach(doc => {
+            const { risk_level_percentage, date } = doc.data();
+            if (risk_level_percentage && date) {
+                // Ensure that the date field is converted to a Date object
+                const formattedDate = new Date(date);
+                const yearMonth = formattedDate.toISOString().slice(0, 7); // Extracting year and month from date
+                if (!riskData[yearMonth]) {
+                    riskData[yearMonth] = {};
+                }
+                if (!riskData[yearMonth][risk_level_percentage]) {
+                    riskData[yearMonth][risk_level_percentage] = 0;
+                }
+                riskData[yearMonth][risk_level_percentage]++;
+            }
+        });
+
+        // Constructing response in the format: { "year-month": { "riskPercentage": count, ... }, ... }
+        const responseData = {};
+        Object.keys(riskData).forEach(yearMonth => {
+            responseData[yearMonth] = Object.entries(riskData[yearMonth]).reduce((acc, [riskPercentage, count]) => {
+                acc[riskPercentage] = count;
+                return acc;
+            }, {});
+        });
+
+        res.status(200).json(responseData);
+    } catch (error) {
+        console.error('Error fetching risk percentages:', error);
+        res.status(500).json({ message: 'Failed to fetch risk percentages' });
+    }
+});
+
+
+
+
 
 
 

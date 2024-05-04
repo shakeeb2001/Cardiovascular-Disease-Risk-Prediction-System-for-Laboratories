@@ -1,3 +1,5 @@
+// Report.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Button, Modal } from 'react-bootstrap';
@@ -14,7 +16,9 @@ function Report() {
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [patientToApprove, setPatientToApprove] = useState(null);
   const [showSendButton, setShowSendButton] = useState(false);
-  const [approvedPatients, setApprovedPatients] = useState([]); // State to track approved patients
+  const [approvedPatients, setApprovedPatients] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [patientToDelete, setPatientToDelete] = useState(null);
 
   const fetchAllPatients = async () => {
     setIsLoading(true);
@@ -48,10 +52,16 @@ function Report() {
     return <PDFViewerPage selectedPatient={selectedPatient} />;
   }
 
-  const handleDelete = async (id) => {
+  const handleDeleteConfirmation = (patient) => {
+    setPatientToDelete(patient);
+    setShowDeleteModal(true);
+  };
+
+  const handleDelete = async () => {
     try {
-      await axios.delete(`http://127.0.0.1:4000/patients/${id}`);
+      await axios.delete(`http://127.0.0.1:4000/patients/${patientToDelete.nationalid}`);
       await fetchAllPatients();
+      setShowDeleteModal(false);
     } catch (error) {
       console.error('Error deleting patient:', error);
     }
@@ -65,7 +75,6 @@ function Report() {
         setPatientToApprove(null);
         setShowApproveModal(false);
         setShowSendButton(true);
-        // Update the approvedPatients state
         setApprovedPatients([...approvedPatients, patientToApprove.id]);
       } catch (error) {
         console.error('Error approving patient:', error);
@@ -113,7 +122,7 @@ function Report() {
   };
 
   return (
-    <div className="container mt-3 report-container">
+    <div className="container-fluid mt-3 report-container">
       <LoadingModal show={isLoading} />
       <div className="mt-3">
         <h2 className="text-center report">Patients Report</h2>
@@ -122,7 +131,7 @@ function Report() {
         ) : patients.length === 0 ? (
           <p>No patients found.</p>
         ) : (
-          <Table bordered hover className="table">
+          <Table bordered hover className="table-responsive">
             <thead>
               <tr>
                 <th>Name</th>
@@ -130,6 +139,7 @@ function Report() {
                 <th>Email</th>
                 <th>Sex</th>
                 <th>Age</th>
+                <th>Date</th>
                 <th>Risk Level Percentage</th>
                 <th>Result</th>
                 <th>Stress Level</th>
@@ -144,11 +154,12 @@ function Report() {
                   <td>{patient.email}</td>
                   <td>{patient.sex === '1' ? 'Male' : 'Female'}</td>
                   <td>{patient.age}</td>
+                  <td>{patient.date}</td>
                   <td className={getRiskPercentageColor(patient.risk_level_percentage)}>{patient.risk_level_percentage}</td>
                   <td className={getResultColor(patient.result)}>{patient.result}</td>
                   <td className={getStressLevelColor(patient.stress_level)}>{patient.stress_level}</td>
                   <td className="actions">
-                    <Button variant="danger" className="tb-btn" onClick={() => handleDelete(patient.id)}>Delete</Button>
+                    <Button variant="danger" className="tb-btn" onClick={() => handleDeleteConfirmation(patient)}>Delete</Button>
                     <Button variant="warning" onClick={() => handleViewPDF(patient)}>PDF</Button>
                     {showSendButton && userRole !== 'manager' && (
                       <Button variant="primary" className="tb-btn" onClick={() => handleSendPDF(patient.id)}>Send</Button>
@@ -158,7 +169,7 @@ function Report() {
                         variant="success"
                         className="tb-btn"
                         onClick={() => handleApproveConfirmation(patient)}
-                        disabled={approvedPatients.includes(patient.id)} // Disable the button if the patient is already approved
+                        disabled={approvedPatients.includes(patient.id)}
                       >
                         {approvedPatients.includes(patient.id) ? 'Approved' : 'Approve'}
                       </Button>
@@ -178,6 +189,16 @@ function Report() {
         <Modal.Footer>
           <Button variant="danger" onClick={() => setShowApproveModal(false)}>No</Button>
           <Button variant="success" onClick={handleApprove}>Yes</Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Patient</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this patient record?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>No</Button>
+          <Button variant="danger" onClick={handleDelete}>Yes</Button>
         </Modal.Footer>
       </Modal>
     </div>
