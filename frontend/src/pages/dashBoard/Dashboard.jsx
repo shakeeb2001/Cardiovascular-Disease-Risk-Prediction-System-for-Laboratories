@@ -37,10 +37,11 @@ const Dashboard = () => {
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     minHeight: '100vh',
+    opacity: 0.9
   };
 
   return (
-    <div className='dash-class' style={backgroundImageStyle}>
+    <div className='dash-class' >
       <Container className="mt-5">
         <Row className="justify-content-center">
           <Col md={3} className="mb-4">

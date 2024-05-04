@@ -1,9 +1,5 @@
 
-body {
-    overflow: hidden;
-    padding-top: 90px;
 
-  }
 
 .dash-class{
 
@@ -20,16 +16,15 @@ body {
     font-size: 50px;
     text-decoration: none;
     padding-top: 65px;
-    background-color: rgb(23, 141, 126);
-    color: white;
+    background-color: rgb(255, 255, 255);
+    color: rgb(23, 141, 126);
     height: 200px;
     border: none;
     transition: transform 0.3s; /* Added transition */
 }
 
 .dashboard-card-link:hover {
-    color: white;
-    background-color: rgb(17, 117, 104);
+    color: rgb(15, 86, 76);
     transform: scale(1.05); /* Added transformation */
 }
 .card-title

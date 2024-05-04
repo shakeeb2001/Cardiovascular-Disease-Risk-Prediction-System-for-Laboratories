@@ -3,6 +3,7 @@
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
+
 }
 
 
@@ -15,6 +16,7 @@ body {
 /* Toggle Styles */
 
 #viewport {
+  margin-top: 70px;
   padding-left: 250px;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
@@ -107,3 +109,25 @@ body {
 }
 
 
+@media (max-width: 768px) {
+  #sidebar {
+    left: -250px; /* Hide sidebar by default */
+  }
+
+  #sidebar.active {
+    left: 0; /* Show sidebar when active */
+  }
+
+  #viewport {
+    padding-left: 0; /* Adjust content padding */
+  }
+}
+
+#sidebarCollapse {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+}

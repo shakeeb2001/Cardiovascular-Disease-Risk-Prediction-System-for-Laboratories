@@ -2,10 +2,27 @@
     position: relative;
     width: 100%;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.199); /* Adjust the last value to change transparency */
+    background-size: cover;
+    background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    opacity: 0.9; /* Reduce the transparency of the image */
+}
+.lab-background-image{
+    width: 100%;
+    z-index: 1;
+    height: 100%;
+}
+
+
+.lab-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 80px;
+    width: 340px; /* Adjust the width as needed */
+    z-index: 1; /* Ensure the image is above other elements */
 }
 
 .cardio-care {
@@ -13,13 +30,17 @@
     color: #c63d3d;
 }
 
+.login-form-big{
+    top: 100px;
+    background-color: rgba(23, 141, 125, 0.593);
+}
+
 .login-form {
-    top: 60px;
-    left: 30px;
+    bottom: 25px;
     background-color: rgb(23, 141, 126);
     color: white;
     border: none;
-    padding-left: 350px;
+    padding-left: 300px;
 }
 
 .login-button {
@@ -31,16 +52,23 @@
 .login-button:hover {
     background-color: rgb(18, 98, 87);
     color: rgb(255, 255, 255);
-
 }
 
 /* Additional styling for the form inputs */
 .form-control {
-    background-color: rgba(255, 255, 255, 0.3); /* Adjust the last value to change transparency */
+    background-color: rgba(255, 255, 255, 0.164); /* Adjust the last value to change transparency */
     color: white;
     border-color: white;
     border-radius: 0.5rem;
+}
 
+/* Change placeholder color to white */
+.form-control::placeholder {
+    color: white;
+}
+
+h3 {
+    font-size: 20px;
 }
 
 .form-control:focus {
@@ -49,3 +77,42 @@
     border-color: white;
     box-shadow: none;
 }
+
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .login-form-big{
+
+    }
+    
+    .login-form {
+        padding-left: 0;
+         /* Remove left padding */
+    }
+    
+    .lab-image {
+        display: none; /* Hide the lab image on smaller screens */
+    }
+    p{
+        font-size: small;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: large;
+    }
+
+    .form-control {
+        width: 100%; /* Make form inputs full width */
+        max-width: 300px; /* Limit maximum width */
+        margin-bottom: 10px; /* Add some spacing between inputs */
+    }
+
+    .login-button {
+        width: 100%; /* Make login button full width */
+        max-width: 300px; /* Limit maximum width */
+        margin-top: 10px; /* Add some spacing between inputs and button */
+    }
+}
+
+

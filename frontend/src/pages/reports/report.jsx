@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Table, Button, Modal } from 'react-bootstrap';
 import PDFViewerPage from './PDFViewerPage';
-import LoadingModal from './LoadingModal'; // Import the LoadingModal component
+import LoadingModal from './LoadingModal';
 import './Report.css';
 
 function Report() {
-  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || ''); // Initialize userRole from local storage or empty string
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || '');
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,6 +14,7 @@ function Report() {
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [patientToApprove, setPatientToApprove] = useState(null);
   const [showSendButton, setShowSendButton] = useState(false);
+  const [approvedPatients, setApprovedPatients] = useState([]); // State to track approved patients
 
   const fetchAllPatients = async () => {
     setIsLoading(true);
@@ -29,7 +30,6 @@ function Report() {
 
   useEffect(() => {
     fetchAllPatients();
-    // Retrieve userRole from local storage and set it
     const storedUserRole = localStorage.getItem('userRole');
     if (storedUserRole) {
       setUserRole(storedUserRole);
@@ -37,7 +37,6 @@ function Report() {
   }, []);
 
   useEffect(() => {
-    // Save userRole to local storage whenever it changes
     localStorage.setItem('userRole', userRole);
   }, [userRole]);
 
@@ -45,35 +44,31 @@ function Report() {
     setSelectedPatient(patient);
   };
 
-
   if (selectedPatient) {
     return <PDFViewerPage selectedPatient={selectedPatient} />;
   }
+
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://127.0.0.1:4000/patients/${id}`);
-      // After successful deletion, refetch the patient list
       await fetchAllPatients();
     } catch (error) {
       console.error('Error deleting patient:', error);
-      // Handle error state here if needed
     }
   };
 
   const handleApprove = async () => {
     if (patientToApprove && userRole === 'manager') {
       try {
-        // Implement the approve functionality here
-        // This function will only be called by the lab manager
         await axios.post(`http://127.0.0.1:4000/patients/${patientToApprove.id}/approve`);
-        // After successful approval, refetch the patient list
         await fetchAllPatients();
-        setPatientToApprove(null); // Reset patientToApprove state
-        setShowApproveModal(false); // Close the modal
-        setShowSendButton(true); // Show the send button
+        setPatientToApprove(null);
+        setShowApproveModal(false);
+        setShowSendButton(true);
+        // Update the approvedPatients state
+        setApprovedPatients([...approvedPatients, patientToApprove.id]);
       } catch (error) {
         console.error('Error approving patient:', error);
-        // Handle error state here if needed
       }
     } else {
       console.log('You do not have permission to approve patients or no patient selected.');
@@ -86,7 +81,7 @@ function Report() {
     } else if (riskLevel > 50) {
       return 'bg-warning text-black';
     } else {
-      return ''; // Default color
+      return '';
     }
   };
 
@@ -111,20 +106,17 @@ function Report() {
 
   const handleSendPDF = async (patientId) => {
     try {
-      // Implement sending PDF logic here
       console.log(`Sending PDF to patient with ID ${patientId}`);
     } catch (error) {
       console.error('Error sending PDF:', error);
-      // Handle error state here if needed
     }
   };
 
   return (
-    <div className="container mt-3 ">
-      <LoadingModal show={isLoading} /> {/* Render the LoadingModal component */}
-     
-      <h2 className="text-center report">Patients Report</h2>
+    <div className="container mt-3 report-container">
+      <LoadingModal show={isLoading} />
       <div className="mt-3">
+        <h2 className="text-center report">Patients Report</h2>
         {error ? (
           <p className="error">Error: {error}</p>
         ) : patients.length === 0 ? (
@@ -156,13 +148,20 @@ function Report() {
                   <td className={getResultColor(patient.result)}>{patient.result}</td>
                   <td className={getStressLevelColor(patient.stress_level)}>{patient.stress_level}</td>
                   <td className="actions">
-                    <Button variant="danger" onClick={() => handleDelete(patient.id)}>Delete</Button>
+                    <Button variant="danger" className="tb-btn" onClick={() => handleDelete(patient.id)}>Delete</Button>
                     <Button variant="warning" onClick={() => handleViewPDF(patient)}>PDF</Button>
                     {showSendButton && userRole !== 'manager' && (
-                      <Button variant="primary" onClick={() => handleSendPDF(patient.id)}>Send</Button>
+                      <Button variant="primary" className="tb-btn" onClick={() => handleSendPDF(patient.id)}>Send</Button>
                     )}
-                    {userRole === 'manager' && ( // Conditionally render the approve button
-                      <Button variant="success" onClick={() => handleApproveConfirmation(patient)}>Approve</Button>
+                    {userRole === 'manager' && (
+                      <Button
+                        variant="success"
+                        className="tb-btn"
+                        onClick={() => handleApproveConfirmation(patient)}
+                        disabled={approvedPatients.includes(patient.id)} // Disable the button if the patient is already approved
+                      >
+                        {approvedPatients.includes(patient.id) ? 'Approved' : 'Approve'}
+                      </Button>
                     )}
                   </td>
                 </tr>
@@ -171,16 +170,13 @@ function Report() {
           </Table>
         )}
       </div>
-      {/* Approval Confirmation Modal */}
       <Modal show={showApproveModal} onHide={() => setShowApproveModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Approve Patient</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to approve this patient?
-        </Modal.Body>
+        <Modal.Body>Are you sure you want to approve this patient report?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowApproveModal(false)}>No</Button>
+          <Button variant="danger" onClick={() => setShowApproveModal(false)}>No</Button>
           <Button variant="success" onClick={handleApprove}>Yes</Button>
         </Modal.Footer>
       </Modal>

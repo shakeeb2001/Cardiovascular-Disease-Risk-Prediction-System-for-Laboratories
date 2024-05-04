@@ -1,8 +1,14 @@
+h2{
+  margin-top:120px;
+}
+
 .table {
   width: 100%;
+  margin-top: 20px;
   border-collapse: collapse;
   text-align: center; /* Center align text in table */
-  border-radius: 10px; /* Increase border radius */
+  border-radius: 5px; /* Increase border radius */
+  
   overflow: hidden; /* Ensure border radius is applied correctly */
 }
 
@@ -24,5 +30,8 @@ h3{
 }
 .report{
   color: white;
+}
+.tb-btn{
+  margin: 2px;
 }
 

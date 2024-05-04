@@ -98,11 +98,20 @@ section {
 .mb-1-9, .my-1-9 {
     margin-bottom: 1.9rem;
 }
-@media (min-width: 992px){
+
+.rounded {
+    border-radius: 0.25rem!important;
+}
+
+
+@media (max-width: 768px) {
     .d-lg-inline-block {
         display: inline-block!important;
     }
-}
-.rounded {
-    border-radius: 0.25rem!important;
+    .pro-name{
+        font-size: small;
+    }
+    .ul-list{
+        font-size: small;
+    }
 }

@@ -45,18 +45,24 @@ const Profile = () => {
                   <div className="col-lg-6 mb-4 mb-lg-0 profile-pic">
                     {userData && userData.profilePicUrl && (
                       <img 
-                        src={`http://127.0.0.1:4000${userData.profilePicUrl}`} 
-                        alt="Profile Picture" 
-                        style={{ width: '250px', height: '250px', borderRadius: '50%' }} // Apply styles here
-                      />
+                      src={`http://127.0.0.1:4000${userData.profilePicUrl}`} 
+                      alt="Profile Picture" 
+                      style={{ 
+                          width: '100%', /* Set width to 100% for responsiveness */
+                          maxWidth: '250px', /* Set max width to maintain aspect ratio */
+                          height: 'auto', /* Automatically adjust height */
+                          borderRadius: '50%' 
+                      }}
+                  />
+                  
                     )}
                   </div>
                   <div className="col-lg-6 px-xl-10">
                     <div className="bg-secondary d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
-                      <h3 className="h2 text-white mb-0">{userData && userData.name}</h3>
+                      <h3 className="h2 text-white mb-0 pro-name">{userData && userData.name}</h3>
                       <span className="text-primary">Role: {userData && userData.userRole}</span>
                     </div>
-                    <ul className="list-unstyled mb-1-9">
+                    <ul className="list-unstyled mb-1-9 ul-list">
                       <li className="mb-2 mb-xl-3 display-28">
                         <span className="display-26 text-secondary me-2 font-weight-600">Email:</span> {userData && userData.email}
                       </li>

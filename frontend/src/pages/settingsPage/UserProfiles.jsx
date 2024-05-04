@@ -1,7 +1,6 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
+import './UserProfiles.css';
 
 const UserProfile = () => {
   const [users, setUsers] = useState([]);
@@ -61,39 +60,43 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="container">
-      <h2>User Profile</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile Number</th>
-            <th>Address</th>
-            <th>User Role</th>
-            <th>Username</th>
-            <th>Password</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={index}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.mobileNumber}</td>
-              <td>{user.address}</td>
-              <td>{user.userRole}</td>
-              <td>{user.username}</td>
-              <td>{user.password}</td>
-              <td>
-                <Button variant="primary" onClick={() => handleUpdate(user)}>Update</Button>{' '}
-                <Button variant="danger" onClick={() => handleDelete(user)}>Delete</Button>
-              </td>
+    <div className="container-fluid users-profile">
+      <div>
+        <h4 className='user-profile_title'>User Profiles</h4>
+      </div>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th className="d-none d-sm-table-cell">Address</th>
+              <th className="d-none d-sm-table-cell">User Role</th>
+              <th>Username</th>
+              <th className="d-none d-sm-table-cell">Password</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={index}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.mobileNumber}</td>
+                <td className="d-none d-sm-table-cell">{user.address}</td>
+                <td className="d-none d-sm-table-cell">{user.userRole}</td>
+                <td>{user.username}</td>
+                <td className="d-none d-sm-table-cell">{user.password}</td>
+                <td>
+                  <Button variant="primary" onClick={() => handleUpdate(user)}>Update</Button>{' '}
+                  <Button variant="danger" onClick={() => handleDelete(user)}>Delete</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Update User Modal */}
       <Modal show={showModal} onHide={handleClose}>

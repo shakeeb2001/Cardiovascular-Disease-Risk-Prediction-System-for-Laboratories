@@ -1,13 +1,13 @@
 
 body {
-    background-color: rgb(57, 93, 88);
+    background-color: rgb(15, 93, 83);
     overflow: auto;
 
   }
   
   .input-form-container {
-    padding-top: 10px;
-    background-color: rgb(57, 93, 88);
+    padding-top: 100px;
+    background-color: rgb(15, 93, 83);
     color: white;
     overflow: hidden;
   }

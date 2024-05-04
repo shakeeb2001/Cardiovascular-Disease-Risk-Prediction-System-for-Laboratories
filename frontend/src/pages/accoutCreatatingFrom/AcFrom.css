@@ -1,6 +1,8 @@
 .reg-from-container{
-    padding-left: 250px;
-    
+    padding-top: 70px;
+    margin-left: 250px;
+    overflow-y: hidden;
+
 }
 
 .form-label{
@@ -17,4 +19,15 @@
 
 .form-check-label{
     color: #ffffff;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .reg-from-container {
+        padding-top: 20px; /* Adjust top padding for smaller screens */
+        margin-left: 0; /* Reset margin for smaller screens */
+    }
+    .title-profile {
+        font-size: 24px; /* Adjust font size for smaller screens */
+    }
 }

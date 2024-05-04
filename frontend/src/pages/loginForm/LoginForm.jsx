@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
+import LoginLabBackImage from '../images/LabBackground.jpeg'; 
+import LoginLabImage from '../images/login_lab_image.png'; // Import the lab image
 import { Button, Container, Row, Col, Card, Form, Spinner, Modal } from 'react-bootstrap'; // Import Modal component
 import { useNavigate } from 'react-router-dom';
 
@@ -42,10 +44,6 @@ function LoginForm({ onLogin, updateNavbar }) {
       setIsLoading(false); // Set loading to false when login process finishes
     }
   };
-  
-  
-  
-  
 
   const handleCloseErrorModal = () => {
     setError(null); // Close the error modal
@@ -53,14 +51,22 @@ function LoginForm({ onLogin, updateNavbar }) {
 
   return (
     <Container fluid className='h-100'>
+  
       <Row className='justify-content-center align-items-center h-100'>
         <Col xs={12}>
-          <Card className='text-white my-5 mx-auto login-form' style={{ borderRadius: '1rem', maxWidth: '800px',maxHeight: '500px' }}>
+          <Card className='text-white my-5 mx-auto login-form-big' style={{ borderRadius: '1rem', maxWidth: '730px', maxHeight: '450px' }}>
+          <Card className='text-white my-5 mx-auto login-form' style={{ borderRadius: '1rem', maxWidth: '700px', maxHeight: '500px' }}>
+          <div className='image-con'>
+          <img src={LoginLabImage} alt="Lab" className="lab-image" />
+          </div>
             <Card.Body className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
+            
+             
+
               <h3 className="fw-bold mb-2 text-uppercase">C A R D I O C A R E <span className='cardio-care'>+</span></h3>
               <p className="text-white-50 mb-5">Please enter your login and password!</p>
 
-              <Form.Group className='mb-4 mx-5 w-100'>
+              <Form.Group className='mb-4 mx-5 w-100' required>
                 <Form.Control
                   className='text-white'
                   type='text'
@@ -70,7 +76,7 @@ function LoginForm({ onLogin, updateNavbar }) {
                 />
               </Form.Group>
 
-              <Form.Group className='mb-4 mx-5 w-100'>
+              <Form.Group className='mb-4 mx-5 w-100' required>
                 <Form.Control
                   className='text-white'
                   type='password'
@@ -103,6 +109,7 @@ function LoginForm({ onLogin, updateNavbar }) {
                 </Modal.Footer>
               </Modal>
             </Card.Body>
+          </Card>
           </Card>
         </Col>
       </Row>
