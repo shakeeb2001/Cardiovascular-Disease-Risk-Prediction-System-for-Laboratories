@@ -1,3 +1,6 @@
+
+
+
 import React, { useState, useEffect } from 'react';
 import './ChatBox.css'; // Import the CSS file
 
@@ -41,14 +44,14 @@ const Chat = ({ loggedInUsername }) => {
       // Check if notification is needed
       if ((userRole === 'manager' && receivedMessage.sender === 'assistant') ||
           (userRole === 'assistant' && receivedMessage.sender === 'manager')) {
-        setNotification(`New message from ${receivedMessage.sender}: ${receivedMessage.message}`);
+        setNotification();
       }
     };
 
     ws.onclose = () => {
       console.log('WebSocket disconnected');
       // Attempt to reconnect after a short delay
-      setTimeout(connectWebSocket, 3000);
+      setTimeout(connectWebSocket, 100);
     };
   };
 
@@ -110,50 +113,47 @@ const Chat = ({ loggedInUsername }) => {
             </div>
           </div>
         </div>
-        {/* Chat Box*/}
-        <div className="col-9 px-0">
-          <div className="px-4 py-5 chat-box bg-light">
-            {selectedUser && (
-              <div className="text-center">
-                <h4>{selectedUser.name}</h4>
-              </div>
-            )}
-            {messages.map((msg, index) => {
-              if ((msg.sender === userRole && msg.receiver === selectedUser.username) ||
-                  (msg.sender === selectedUser.username && msg.receiver === userRole)) {
-                return (
-                  <div key={index} className={`media w-50 mb-3 ${msg.sender === userRole ? 'ml-auto' : ''}`}>
-                    <div className={`media-body ${msg.sender === userRole ? 'text-right' : ''}`}>
-                      <div className={`bg-${msg.sender === userRole ? 'primary' : 'light'} rounded py-2 px-3 mb-2`}>
-                        <p className={`text-small mb-0 text-${msg.sender === userRole ? 'white' : 'black'}`}>
-                          {msg.sender === 'manager' ? 'Manager: ' : 'Assistant: '} {msg.message}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-              return null;
-            })}
-            {notification && <div className="notification">{notification}</div>}
-          </div>
-          {/* Typing area */}
-          <form onSubmit={sendMessage} className="bg-light ">
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Type a message"
-                aria-describedby="button-addon2"
-                className="form-control rounded-0 border-0 py-3 chat-box-input"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <div className="input-group-append">
-                <button type="submit" className="btn btn-primary">Send</button>
-              </div>
-            </div>
-          </form>
-        </div>
+{/* Chat Box*/}
+<div className="col-9 px-0">
+  <div className="px-4 py-5 chat-box bg-light">
+    {selectedUser && (
+      <div className="text-center">
+        <h4>{selectedUser.name}</h4>
+      </div>
+    )}
+    {messages.map((msg, index) => (
+  <div key={index} className={`media w-50 mb-3 ${msg.sender === loggedInUsername ? 'ml-auto' : ''}`}>
+    <div className={`media-body ${msg.sender === loggedInUsername ? 'text-right' : ''}`}>
+      <div className={`bg-${msg.sender === loggedInUsername ? 'primary' : 'light'} rounded py-2 px-3 mb-2 ${msg.sender === loggedInUsername ? 'ml-auto' : ''}`}>
+        <p className={`text-small mb-0 text-${msg.sender === loggedInUsername ? 'white' : 'black'}`}>
+          {msg.sender === 'manager' ? 'Manager: ' : 'Assistant: '} {msg.message}
+        </p>
+      </div>
+    </div>
+  </div>
+))}
+
+    {notification && <div className="notification">{notification}</div>}
+  </div>
+  {/* Typing area */}
+  <form onSubmit={sendMessage} className="bg-light ">
+    <div className="input-group">
+      <input
+        type="text"
+        placeholder="Type a message"
+        aria-describedby="button-addon2"
+        className="form-control rounded-0 border-0 py-3 chat-box-input"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+      <div className="input-group-append">
+        <button type="submit" className="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
       </div>
     </div>
   );

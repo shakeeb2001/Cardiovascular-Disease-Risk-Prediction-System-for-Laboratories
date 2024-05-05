@@ -23,6 +23,7 @@ function App() {
   const handleLogin = (username, userRole) => {
     setLoggedInUsername(username);
     setUserRole(userRole);
+
   };
 
   
@@ -37,7 +38,7 @@ function App() {
       <Route path="/" element={<Dashboard username={loggedInUsername} userRole={userRole} />} />
       <Route path="/reports" element={<Reports userRole={userRole} /> } />
       <Route path="/settings" element={<Settings userRole={userRole} />} />
-      <Route path="/communication" element={<Communication userRole={userRole} />} />
+      <Route path="/communication" element={<Communication userRole={userRole} username={loggedInUsername}/>} />
       <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
       <Route path="/signout" element={<SignOutForm />} />
       {/* <Route path="/newlog" element={<NewLog />} /> */}

@@ -236,11 +236,7 @@ app.get('/all-patient-details', async (req, res) => {
     }
 });
 
-// Inside your Express server
 
-// Other server setup code...
-
-// Delete patient by national ID route
 app.delete('/patients/:nationalid', async (req, res) => {
     try {
         const nationalid = req.params.nationalid;
