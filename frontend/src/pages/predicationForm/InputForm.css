@@ -4,17 +4,44 @@ body {
     overflow: auto;
 
   }
+
+.form-heding{
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  padding-left: 50px;
+  padding-top: 50px;
+  padding-bottom: 40px;
+  margin-top: -1%;
+
+}
+ 
+
+  .predction-form-card{
+    background-color: rgb(14, 79, 71);
+    width: 90%;
+    top: 80px;
+    left: 70px;
+    padding: 50px;
+    padding-bottom: 200px;
+  }
   
   .input-form-container {
-    padding-top: 100px;
     background-color: rgb(15, 93, 83);
     color: white;
     overflow: hidden;
   }
-  
+  .form-control{
+    background-color: rgba(164, 164, 164, 0.264);
+    height: 50px;
+  }
   .input-form {
     max-width: 500px;
     margin: auto;
+  }
+  .form-control:focus{
+    background-color: rgba(95, 158, 160, 0.212);
+    border: solid rgb(255, 255, 255);
   }
   
   .form-group {
@@ -38,4 +65,7 @@ body {
     cursor: not-allowed;
   }
 
-  
+  label{
+    color: rgb(218, 218, 218);
+    font-weight: 500;
+  }

@@ -1,7 +1,7 @@
-// Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import NotificationIcon from '../pages/images/notifications-outline.svg'; // Assuming the path to your SVG file is correct
 import './Navbar.css';
 
 const Navbar = () => {
@@ -43,6 +43,16 @@ const Navbar = () => {
   // Check if the current route is the login page
   const isLoginPage = location.pathname === '/login';
 
+  // Check if the current route is the home page
+  const isHomePage = location.pathname === '/';
+
+  // Check if the current route is one of the specified pages
+  const isReportPage = location.pathname === '/reports';
+  const isCommunicationPage = location.pathname === '/communication';
+  const isSettingsPage = location.pathname === '/settings';
+  const isPredictionPage = location.pathname === '/prediction';
+  const isRegisterPage = location.pathname === '/register';
+
   // Render the Navbar only if it's not the login page
   return (
     !isLoginPage && (
@@ -53,11 +63,28 @@ const Navbar = () => {
               C A R D I O C A R E <span className='cardio-care'>+</span>
             </h6>
           </Link>
+          {(isHomePage || isReportPage || isCommunicationPage || isSettingsPage || isPredictionPage || isRegisterPage) && (
+            <div className="d-flex justify-content-center w-100">
+              <h5 className="fw-bold mb-2 navbar-text">
+                {isHomePage && 'Dashboard'}
+                {isReportPage && 'Patient Reports'}
+                {isCommunicationPage && 'Communication'}
+                {isSettingsPage && 'Settings'}
+                {isPredictionPage && 'Prediction'}
+                {isRegisterPage && 'Register'}
+              </h5>
+            </div>
+          )}
           <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
+                {/* Notification Icon */}
+                <img src={NotificationIcon} alt="Notification" className="notification-icon" />
+                {/* User Profile */}
                 {userData && (
-                  <div>
+                  
+                  <div className='profile-dropdown'>
+                    
                     <img
                       src={`http://127.0.0.1:4000${userData.profilePicUrl}`} 
                       alt="Profile"

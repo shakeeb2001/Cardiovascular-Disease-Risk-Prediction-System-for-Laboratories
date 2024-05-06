@@ -5,92 +5,131 @@ import './RiskChart.css';
 
 function ApexChart() {
     const [riskData, setRiskData] = useState({});
-    const [zoomLevel, setZoomLevel] = useState('month');
+    const [loading, setLoading] = useState(true); // Added loading state
 
     useEffect(() => {
         // Fetch risk percentages from the server
         axios.get('http://127.0.0.1:4000/risk-percentage')
             .then(response => {
                 setRiskData(response.data);
+                setLoading(false); // Data fetching complete, set loading to false
             })
             .catch(error => {
                 console.error('Error fetching risk percentages:', error);
+                setLoading(false); // Set loading to false in case of error
             });
     }, []);
 
-    // Extract x-axis labels and y-axis data from riskData based on zoom level
-    const getXAxisLabels = () => {
-        if (zoomLevel === 'month') {
-            return Object.keys(riskData).map(month => month.slice(0, 7));
-        } else {
-            return Object.keys(riskData);
-        }
-    };
-
     const getChartData = () => {
-        if (zoomLevel === 'month') {
-            // Calculate average risk percentage for each month
-            return Object.values(riskData).map(riskPercentageCounts => {
-                const total = Object.values(riskPercentageCounts).reduce((acc, count) => acc + count, 0);
-                const averageRiskPercentage = Object.entries(riskPercentageCounts).reduce((acc, [riskPercentage, count]) => {
-                    return acc + parseInt(riskPercentage) * count;
-                }, 0) / total;
-                return Math.round(averageRiskPercentage);
-            });
-        } else {
-            // Use risk percentages for each day
-            const selectedMonth = Object.keys(riskData)[0]; // Assuming only one month's data is fetched
-            return Object.values(riskData[selectedMonth]);
+        if (Object.keys(riskData).length === 0) {
+            // If riskData is empty, return an empty array
+            return [];
         }
+
+        const counts = [0, 0, 0, 0, 0, 0, 0, 0]; // For thresholds 20, 30, 40, 50, 60, 70, 80, 90
+
+        Object.values(riskData).forEach(riskPercentageCounts => {
+            Object.entries(riskPercentageCounts).forEach(([riskPercentage, count]) => {
+                const percentage = parseInt(riskPercentage);
+                for (let i = 0; i < counts.length; i++) {
+                    if (percentage <= (i + 2) * 10) {
+                        counts[i] += count; 
+                    }
+                }
+            });
+        });
+
+        return counts;
     };
 
-    const xAxisLabels = getXAxisLabels();
     const chartData = getChartData();
 
     return (
         <div className='chat-div'>
-            <div id="chart">
-                <div id="chart-timeline">
-                    <ReactApexChart
-                        options={{
-                            chart: {
-                                id: 'area-datetime',
-                                type: 'area',
-                                height: 350,
-                                zoom: {
-                                    enabled: true,
-                                    type: 'x',
-                                    autoScaleYaxis: true
-                                },
-                                toolbar: {
-                                    autoSelected: 'zoom'
-                                }
-                            },
-                            xaxis: {
-                                categories: xAxisLabels,
-                                labels: {
-                                    show: true,
-                                    rotate: -45,
-                                    rotateAlways: true
-                                }
-                            },
-                            yaxis: {
-                                min: 0,
-                                max: 100,
-                                tickAmount: 11,
-                                labels: {
-                                    formatter: function (value) {
-                                        return value + "%";
+            {loading ? ( // Show loading message while data is being fetched
+                <p>Loading...</p>
+            ) : (
+                <div id="chart">
+                             <h3>Patient Risk Analysis</h3>
+                    <div id="chart-timeline">
+                        <ReactApexChart
+                            options={{
+                                chart: {
+                                    id: 'bar-chart',
+                                    type: 'bar',
+                                    height: 380,
+                                    toolbar: {
+                                        show: false
                                     }
+                                },
+                                plotOptions: {
+                                    bar: {
+                                        horizontal: false,
+                                        columnWidth: '55%',
+                                        endingShape: 'flat',
+                                        barHeight: '80%' // Increase the space between bars
+                                    },
+                                },
+                                xaxis: {
+                                    categories: ['20', '30', '40', '50', '60', '70', '80', '90'],
+                                    labels: {
+                                        show: true,
+                                        style: {
+                                            colors: '#ffffff' // Set x-axis text color to white
+                                        }
+                                    },
+                                    axisBorder: {
+                                        show: true,
+                                        color: '#ffffff' // Set color to white for x-axis grid lines
+                                    },
+                                    axisTicks: {
+                                        show: true,
+                                        color: '#ffffff' // Set color to white for x-axis ticks
+                                    }
+                                },
+                                yaxis: {
+                                    min: 0,
+                                    labels: {
+                                        formatter: function (value) {
+                                            return value.toFixed(0);
+                                        },
+                                        style: {
+                                            colors: '#ffffff', // Set y-axis text color to white
+                                            fontSize: '14px' // Increase font size of y-axis labels
+                                        }
+
+                                    }
+                                },
+                                fill: {
+                                    colors: ['#ffffff'] // Set color to white for bars
+                                },
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                grid: {
+                                    show: true,
+                                    borderColor: '#ffffff', // Set color to white for grid lines
+                                    strokeDashArray: 6, // Increase the space between grid lines
+                                    position: 'back',
+                                    xaxis: {
+                                        lines: {
+                                            show: false
+                                        }
+                                    },    
+                                    yaxis: {
+                                        lines: {
+                                            show: true
+                                        }
+                                    },  
                                 }
-                            }
-                        }}
-                        series={[{ data: chartData }]}
-                        type="area"
-                        height={350}
-                    />
+                            }}
+                            series={[{ data: chartData }]}
+                            type="bar"
+                            height={350}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Card } from 'react-bootstrap';
 import './InputForm.css';
 
 function InputForm({ setResults }) {
@@ -11,8 +12,8 @@ function InputForm({ setResults }) {
     sex: '1',
     age: '34',
     date:'2023-04-16',
-    height: '180',
-    weight: '80',
+    height: '',
+    weight: '',
     currentSmoker: '1',
     cigsPerDay: '15',
     BPMeds: '0',
@@ -22,7 +23,7 @@ function InputForm({ setResults }) {
     totChol: '230',
     sysBP: '110',
     diaBP: '88',
-    BMI: '24',
+    BMI: '',
     heartRate: '90',
     glucose: '110'
   });
@@ -33,10 +34,33 @@ function InputForm({ setResults }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Update form data
     setFormData(prevState => ({
       ...prevState,
       [name]: value
     }));
+
+    // If 'Current Smoker' is 'No', disable 'Cigarettes Per Day' field
+    if (name === 'currentSmoker' && value === '0') {
+      setFormData(prevState => ({
+        ...prevState,
+        cigsPerDay: '' // Reset 'Cigarettes Per Day' to empty string
+      }));
+    }
+
+    // Calculate BMI
+    if (name === 'height' || name === 'weight' || name === 'feet' || name === 'inches') {
+      const feet = parseFloat(formData.feet) || 0; // Convert feet to number, defaulting to 0 if empty
+      const inches = parseFloat(formData.inches) || 0; // Convert inches to number, defaulting to 0 if empty
+      const heightInMeters = (feet * 12 + inches) * 0.0254; // Convert feet and inches to meters
+      const weightInKg = parseFloat(formData.weight); // Weight in kilograms
+      const bmi = weightInKg / (heightInMeters * heightInMeters); // BMI calculation
+      setFormData(prevState => ({
+        ...prevState,
+        BMI: isNaN(bmi) ? '' : bmi.toFixed(2) // Round BMI to two decimal places if it's a number
+      }));
+    }
   };
 
   
@@ -64,7 +88,7 @@ function InputForm({ setResults }) {
       };
   
       // Save form input data along with prediction results
-      await axios.post('http://127.0.0.1:4000/patient-details', dataToSend);
+    await axios.post('http://127.0.0.1:4000/patient-details', dataToSend);
   
       // Navigate to result page
       navigate('/result');
@@ -81,9 +105,9 @@ function InputForm({ setResults }) {
   }, [formData]);
 
   return (
-    <div className="input-form-container">
-  
-      <h2 className='text-left'>Prediction Form</h2>
+<div className="input-form-container">
+  <Card className='predction-form-card'>
+    <h2 className='form-heding'>Fill the Patients Informations </h2>
       <div className="row">
         <div className="col-md-6">
           <form onSubmit={handleSubmit} className="input-form">
@@ -122,14 +146,18 @@ function InputForm({ setResults }) {
             </div>
 
             <div className="form-group">
-              <label>Height (cm):</label>
-              <input type="number" name="height" value={formData.height} onChange={handleChange} className="form-control" min="0" required />
-            </div>
+                <label>Height (Feet):</label>
+                <input type="number" name="feet" value={formData.feet} onChange={handleChange} className="form-control" min="0" required />
+              </div>
+              <div className="form-group">
+                <label>Height (Inches):</label>
+                <input type="number" name="inches" value={formData.inches} onChange={handleChange} className="form-control" min="0" max="11" required />
+              </div>
 
-            <div className="form-group">
-              <label>Weight (kg):</label>
-              <input type="number" name="weight" value={formData.weight} onChange={handleChange} className="form-control" min="0" required />
-            </div>
+              <div className="form-group">
+                <label>Weight (kg):</label>
+                <input type="number" name="weight" value={formData.weight} onChange={handleChange} className="form-control" min="0" required />
+             </div>
 
             <div className="form-group">
               <label>Current Smoker:</label>
@@ -201,8 +229,8 @@ function InputForm({ setResults }) {
 
             <div className="form-group">
               <label>BMI:</label>
-              <input type="number" name="BMI" value={formData.BMI} onChange={handleChange} className="form-control" min="0" required />
-            </div>
+              <input type="text" name="BMI" value={formData.BMI} onChange={handleChange} className="form-control" required />
+           </div>
 
             <div className="form-group">
               <label>Heart Rate (bpm):</label>
@@ -220,7 +248,9 @@ function InputForm({ setResults }) {
           </form>
         </div>
       </div>
+    </Card>
     </div>
+   
   );
 }
 
