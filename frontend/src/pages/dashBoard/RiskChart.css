@@ -1,7 +1,14 @@
-#chart{
-    width: 152%;
+#chart {
+    width: 100%; /* Set width to 100% for mobile devices */
     position: relative;
-    margin-top:  130px;
-    right: 200px;
+    margin-top: 130px;
+    padding-right: 40px; /* Reset right position */
     
+}
+
+@media (min-width: 768px) {
+    #chart {
+        width: 152%; /* Adjust width for larger screens */
+        right: 200px;
+    }
 }

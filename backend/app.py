@@ -165,8 +165,32 @@ def predict():
     if input_data['heartRate'].values[0] > max_heart_rate:
         probability_adjustment += 0.2
 
-    if input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 10:
-        probability_adjustment += 0.2
+    if input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 1:
+        probability_adjustment += 0.036
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 2:
+        probability_adjustment += 0.072
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 3:
+        probability_adjustment += 0.108
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 4:
+        probability_adjustment += 0.144
+
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 5:
+        probability_adjustment += 0.18
+
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 6:
+        probability_adjustment += 0.216
+
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 7:
+        probability_adjustment += 0.252
+    
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 8:
+        probability_adjustment += 0.288
+    
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 9:
+        probability_adjustment += 0.324
+
+    elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 10:
+        probability_adjustment += 0.36
 
     heart_rate = input_data['heartRate'].values[0]
     sysBP = input_data['sysBP'].values[0]

@@ -1,11 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
+@import '~@fortawesome/fontawesome-free/css/all.css';
 
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
-
 }
-
 
 .setting-title {
   font-size: large;
@@ -36,7 +34,8 @@ body {
   z-index: 1000;
   position: fixed;
   left: 250px;
-  width: 260px;
+  margin-top: 30px;
+  width: 250px;
   height: 100%;
   margin-left: -250px;
   overflow-y: auto;
@@ -71,7 +70,7 @@ body {
 #sidebar .nav a {
   background: none;
   color: #ffffff;
-  font-size: 23px;
+  font-size: 20px;
   padding: 16px 24px;
   line-height: 80px;
   text-decoration: none;

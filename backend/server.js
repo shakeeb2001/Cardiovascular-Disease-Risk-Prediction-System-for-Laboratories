@@ -7,12 +7,14 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const credential = require("./key.json");
 
+
 admin.initializeApp({
     credential: admin.credential.cert(credential)
 });
 
 const db = admin.firestore();
 const app = express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -194,7 +196,7 @@ app.post('/login', async (req, res) => {
 });
 
 
-// Add a route to fetch the count of reports
+
 // Add this route to your Express server
 app.get('/patient-count', async (req, res) => {
     try {
@@ -206,6 +208,54 @@ app.get('/patient-count', async (req, res) => {
       res.status(500).json({ message: 'Failed to fetch patient count' });
     }
   });
+
+  // Add a route to increment prediction count
+app.post('/increment-prediction-count', async (req, res) => {
+    try {
+
+        await db.collection('predictionCounts').doc('countDocument').update({
+            predictionCount: admin.firestore.FieldValue.increment(1)
+        });
+        
+
+        res.status(200).json({ message: 'Prediction count incremented successfully' });
+    } catch (error) {
+        console.error('Error incrementing prediction count:', error);
+        res.status(500).json({ message: 'Failed to increment prediction count' });
+    }
+});
+
+
+app.get('/prediction-count', async (req, res) => {
+    try {
+      const predictionSnapshot = await db.collection('predictionCounts').doc('countDocument').get();
+      const count = predictionSnapshot.data().predictionCount;
+      res.status(200).json({ count });
+    } catch (error) {
+      console.error('Error fetching prediction count:', error);
+      res.status(500).json({ message: 'Failed to fetch prediction count' });
+    }
+  });
+  
+
+// Add a route to fetch patient data
+app.get('/patient-data', async (req, res) => {
+    try {
+        // Retrieve all patient data from the Firestore patients collection
+        const patientsSnapshot = await db.collection('patients').get();
+        const patientData = [];
+
+        patientsSnapshot.forEach(doc => {
+            patientData.push(doc.data());
+        });
+
+        res.status(200).json(patientData);
+    } catch (error) {
+        console.error('Error fetching patient data:', error);
+        res.status(500).json({ message: 'Failed to fetch patient data' });
+    }
+});
+
   
 
 
@@ -265,53 +315,95 @@ app.delete('/patients/:nationalid', async (req, res) => {
 
 
 
-app.get('/risk-percentage', async (req, res) => {
+// Assuming you have a route to update patient details
+app.put('/patients/:id', async (req, res) => {
     try {
-        const patientsSnapshot = await db.collection('patients').get();
-        const riskData = {};
-
-        patientsSnapshot.forEach(doc => {
-            const { risk_level_percentage, date } = doc.data();
-            if (risk_level_percentage && date) {
-                // Ensure that the date field is converted to a Date object
-                const formattedDate = new Date(date);
-                const yearMonth = formattedDate.toISOString().slice(0, 7); // Extracting year and month from date
-                if (!riskData[yearMonth]) {
-                    riskData[yearMonth] = {};
-                }
-                if (!riskData[yearMonth][risk_level_percentage]) {
-                    riskData[yearMonth][risk_level_percentage] = 0;
-                }
-                riskData[yearMonth][risk_level_percentage]++;
-            }
-        });
-
-        // Constructing response in the format: { "year-month": { "riskPercentage": count, ... }, ... }
-        const responseData = {};
-        Object.keys(riskData).forEach(yearMonth => {
-            responseData[yearMonth] = Object.entries(riskData[yearMonth]).reduce((acc, [riskPercentage, count]) => {
-                acc[riskPercentage] = count;
-                return acc;
-            }, {});
-        });
-
-        res.status(200).json(responseData);
+      const { id } = req.params;
+      const { status } = req.body;
+      await db.collection('patients').doc(id).update({ status }); // Assuming 'status' is a boolean field
+      res.status(200).send('Patient status updated successfully');
     } catch (error) {
-        console.error('Error fetching risk percentages:', error);
-        res.status(500).json({ message: 'Failed to fetch risk percentages' });
+      console.error('Error updating patient status:', error);
+      res.status(500).json({ message: 'Failed to update patient status' });
+    }
+  });
+
+// Assuming you have a route to update patient details
+app.patch('/patients/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      console.log(req.body)
+
+      // Assuming db is your Firestore instance
+const patientRef = db.collection('patients');
+const patientSnapshot = await patientRef.where('nationalid', '==', id).get();
+
+if (patientSnapshot.empty) {
+  // Handle case where patient with given nationalid is not found
+  console.log('Patient not found');
+} else {
+  // Update the status of the patient
+  patientSnapshot.forEach(async (doc) => {
+    try {
+      await doc.ref.update({ status: status });
+      console.log('Patient status updated successfully');
+    } catch (error) {
+      console.error('Error updating patient status:', error);
+    }
+  });
+}
+
+    //   await db.collection('patients').doc({nationalid:id}).update({ status }); // Assuming 'status' is a boolean field
+      res.status(200).send('Patient status updated successfully');
+    } catch (error) {
+      console.error('Error updating patient status:', error);
+      res.status(500).json({ message: 'Failed to update patient status' });
+    }
+  });
+
+
+// Define route to save messages
+app.post('/save-message', async (req, res) => {
+    try {
+        const { sender, receiver, message } = req.body;
+
+        // Save message to Firestore with current timestamp
+        await db.collection('messages').add({
+            sender,
+            receiver,
+            message,
+            timestamp: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        res.status(200).json({ message: 'Message saved successfully' });
+    } catch (error) {
+        console.error('Error saving message:', error);
+        res.status(500).json({ message: 'Failed to save message' });
     }
 });
 
+// Define route to fetch all messages
+app.get('/messages', async (req, res) => {
+    try {
+        // Fetch all messages from Firestore
+        const messagesSnapshot = await db.collection('messages').orderBy('timestamp', 'asc').get();
+        const messages = [];
 
+        messagesSnapshot.forEach(doc => {
+            messages.push(doc.data());
+        });
 
-
-
-
-
-
-
+        res.status(200).json(messages);
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+        res.status(500).json({ message: 'Failed to fetch messages' });
+    }
+});
+  
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
+

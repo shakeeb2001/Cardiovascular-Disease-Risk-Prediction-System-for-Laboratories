@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LoginHome from './pages/loginForm/LoginHome';
 import Settings from './pages/settingsPage/SettingPage';
-import Communication from './pages/communication/Communication';
+ import Communication from './pages/communication/Communication';
 import Dashboard from './pages/dashBoard/Dashboard';
 import Reports from './pages/Reports/Report';
 import LoginForm from './pages/loginForm/LoginForm';
@@ -35,13 +35,12 @@ function App() {
     <Routes>
      
       <Route path="/home" element={<LoginHome />} />
+      <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
       <Route path="/" element={<Dashboard username={loggedInUsername} userRole={userRole} />} />
       <Route path="/reports" element={<Reports userRole={userRole} /> } />
       <Route path="/settings" element={<Settings userRole={userRole} />} />
       <Route path="/communication" element={<Communication userRole={userRole} username={loggedInUsername}/>} />
-      <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
       <Route path="/signout" element={<SignOutForm />} />
-      {/* <Route path="/newlog" element={<NewLog />} /> */}
       <Route path="/prediction" element={<InputForm setResults={setResults} userRole={userRole} />} />
       <Route path="/result" element={<Result results={results} userRole={userRole} />} />
       <Route path="/report" element={<ReportPage userRole={userRole} />} /> 

@@ -32,12 +32,13 @@
 
 .login-form-big{
     top: 100px;
+    left: 15px;
     background-color: rgba(23, 141, 125, 0.593);
 }
 
 .login-form {
-    bottom: 25px;
-    background-color: rgb(23, 141, 126);
+    bottom: 30px;
+    background-color: rgba(23, 141, 125, 0.555);
     color: white;
     border: none;
     padding-left: 300px;
@@ -82,6 +83,8 @@ h3 {
 /* Media query for smaller screens */
 @media (max-width: 768px) {
     .login-form-big{
+      
+        width: 450px;
 
     }
     
@@ -115,4 +118,36 @@ h3 {
     }
 }
 
+
+@media (max-width: 328px){
+    .login-form-big{
+      
+        width: 250px;
+        height: 400px;
+        top: 5px;
+
+    }
+
+    .login-form {
+        padding-left: 0;
+        height: 400px;
+        width: 250px;
+        bottom: 50px;
+        ;
+         /* Remove left padding */
+    }
+    .login-button {
+        border: none;
+        width: 100px;
+        height: 50px;
+        
+        color: rgb(23, 141, 126);
+        background-color: rgb(255, 255, 255);
+    }
+
+    .login-title-login{
+        font-size: 10px;
+    }
+    
+}
 

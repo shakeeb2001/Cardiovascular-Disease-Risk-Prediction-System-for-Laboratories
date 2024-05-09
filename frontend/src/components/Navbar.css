@@ -1,26 +1,64 @@
+/* Navbar CSS */
+
+.navbar {
+  background-color: rgb(30, 50, 48);
+}
+
+.navbar-brand {
+  color: white;
+}
+
+.navbar-brand:hover {
+  color: white;
+}
+
+.navbar-toggler {
+  border-color: white;
+}
+
+.navbar-toggler-icon {
+  background-color: white;
+}
+
+.navbar-nav .nav-item .dropdown-toggle {
+  color: white;
+}
+
+.navbar-nav .nav-item .dropdown-menu {
+  background-color: rgba(30, 50, 48, 0.8);
+  border: none;
+}
+
+.navbar-nav .nav-item .dropdown-menu .dropdown-item {
+  color: white;
+}
+
+.navbar-nav .nav-item .dropdown-menu .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Modal CSS */
+.modal-content {
+  background-color: rgb(255, 255, 255);
+  color: rgb(31, 94, 58);
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.modal-footer button {
+  color: white;
+}
+
+.text-nav-center{
+  color: aliceblue;
+}
+
 .navbar-text{
-    color: rgb(255, 255, 255);
-    padding-left: 20px;
-}
-
-.navbar{
-    background-color: rgb(30, 50, 48);
-    height: 80px;
-}
-
-.nav-item{
-    color: rgb(255, 255, 255);
-}
-h5{
-    
-    margin-top: 20px;
-    padding-right: 35px;
-}
-
-.profile-dropdown{
-    width: 190px;
-}
-
-.notification-icon{
-
+  color: #ffffff;
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
+import WecomeBackground from '../images/LabBackground.jpeg'
 import './InputForm.css';
 
 function InputForm({ setResults }) {
@@ -10,22 +11,23 @@ function InputForm({ setResults }) {
     nationalid: '20011470987',
     email: 'ahamed@gmail.com',
     sex: '1',
-    age: '34',
+    age: '26',
     date:'2023-04-16',
     height: '',
     weight: '',
-    currentSmoker: '1',
-    cigsPerDay: '15',
+    currentSmoker: '0',
+    cigsPerDay: '0',
     BPMeds: '0',
     prevalentStroke: '0',
     prevalentHyp: '0',
     diabetes: '0',
-    totChol: '230',
-    sysBP: '110',
-    diaBP: '88',
+    totChol: '170',
+    sysBP: '80',
+    diaBP: '70',
     BMI: '',
-    heartRate: '90',
-    glucose: '110'
+    heartRate: '80',
+    glucose: '90',
+
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -89,6 +91,8 @@ function InputForm({ setResults }) {
   
       // Save form input data along with prediction results
     await axios.post('http://127.0.0.1:4000/patient-details', dataToSend);
+    
+    await axios.post('http://127.0.0.1:4000/increment-prediction-count');
   
       // Navigate to result page
       navigate('/result');
@@ -104,10 +108,19 @@ function InputForm({ setResults }) {
     setIsFormComplete(isComplete);
   }, [formData]);
 
+  const backgroundImageStyle = {
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6)), url(${WecomeBackground})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    minHeight: '100vh',
+    
+  };
+
   return (
-<div className="input-form-container">
-  <Card className='predction-form-card'>
-    <h2 className='form-heding'>Fill the Patients Informations </h2>
+<div className="input-form-container" style={backgroundImageStyle}>
+  <Card className='predction-form-card' style={{ maxHeight: '85vh', overflowY: 'auto' }} >
+    <h2 className='form-heding'>Fill the Patient Informations </h2>
       <div className="row">
         <div className="col-md-6">
           <form onSubmit={handleSubmit} className="input-form">

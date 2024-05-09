@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import axios from 'axios';
+import WecomeBackground from '../images/LabBackground.jpeg'
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -34,8 +35,21 @@ const Profile = () => {
     localStorage.setItem('userRole', userRole);
   }, [userRole]);
 
+
+  const backgroundImageStyle = {
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6)), url(${WecomeBackground})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    minHeight: '100vh',
+    
+  };
+
+
+
+
   return (
-    <section className="bg-none">
+    <section className="bg-none" style={backgroundImageStyle}>
       <div className="container">
         <div className="row">
           <div className="col-lg-12 mb-4 mb-sm-5 ">

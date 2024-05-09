@@ -6,10 +6,9 @@ function SignOutPage() {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // Perform sign out actions here if needed
-    alert('Signed out successfully!');
-    // Navigate to login page
-    navigate('/login');
+    console.log("Signout button clicked");
+    localStorage.clear();
+    navigate('/home');
   };
 
   const handleCancel = () => {

@@ -5,6 +5,8 @@
 
 .container{
     width: 80%;
+    margin-top: 50px;
+    overflow: hidden;
 }
 
 .border-0 {

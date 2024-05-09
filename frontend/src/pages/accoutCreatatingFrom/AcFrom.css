@@ -1,23 +1,23 @@
-.reg-from-container{
+.reg-from-container {
     padding-top: 70px;
     margin-left: 250px;
     overflow-y: hidden;
-
 }
 
-.form-label{
+.form-label {
     color: #ffffff;
 }
 
-.form-control{
+.form-control {
     background-color: #0c7453;
     border: #0c7453;
 }
-.title-profile{
+
+.title-profile {
     color: #ffffff;
 }
 
-.form-check-label{
+.form-check-label {
     color: #ffffff;
 }
 
@@ -25,9 +25,16 @@
 @media (max-width: 768px) {
     .reg-from-container {
         padding-top: 20px; /* Adjust top padding for smaller screens */
-        margin-left: 0; /* Reset margin for smaller screens */
+        margin-left: 20px; /* Adjust margin for smaller screens */
     }
     .title-profile {
         font-size: 24px; /* Adjust font size for smaller screens */
+    }
+    .col-md-3.border-right {
+        padding-right: 0; /* Remove right padding for smaller screens */
+        padding-bottom: 20px; /* Add bottom padding for smaller screens */
+    }
+    .col-md-5 {
+        padding-left: 0; /* Remove left padding for smaller screens */
     }
 }

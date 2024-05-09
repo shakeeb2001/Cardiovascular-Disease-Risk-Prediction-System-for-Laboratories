@@ -1,8 +1,6 @@
-// Report.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, Button, Modal } from 'react-bootstrap';
+import { Table, Button, Modal, Container, Row, Col } from 'react-bootstrap';
 import PDFViewerPage from './PDFViewerPage';
 import LoadingModal from './LoadingModal';
 import './Report.css';
@@ -13,24 +11,37 @@ function Report() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [showApproveModal, setShowApproveModal] = useState(false);
-  const [patientToApprove, setPatientToApprove] = useState(null);
-  const [showSendButton, setShowSendButton] = useState(false);
-  const [approvedPatients, setApprovedPatients] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [patientToDelete, setPatientToDelete] = useState(null);
+  const [statuses, setStatuses] = useState({}); // New state for patient statuses
+  const [approvedPatients, setApprovedPatients] = useState([]); // State to keep track of approved patients
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchAllPatients = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get('http://127.0.0.1:4000/all-patient-details');
       setPatients(response.data);
+      // Initialize status for each patient as empty string
+      const initialStatuses = {};
+      response.data.forEach(patient => {
+        initialStatuses[patient.nationalid] = patient.status;
+      });
+      setStatuses(initialStatuses);
     } catch (error) {
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Function to filter patients based on NIC number
+  const filterPatientsByNIC = (patients, query) => {
+    return patients.filter(patient =>
+      patient.nationalid && patient.nationalid.toLowerCase().includes(query.toLowerCase())
+    );
+  };
+  
 
   useEffect(() => {
     fetchAllPatients();
@@ -67,21 +78,27 @@ function Report() {
     }
   };
 
-  const handleApprove = async () => {
-    if (patientToApprove && userRole === 'manager') {
-      try {
-        await axios.post(`http://127.0.0.1:4000/patients/${patientToApprove.id}/approve`);
-        await fetchAllPatients();
-        setPatientToApprove(null);
-        setShowApproveModal(false);
-        setShowSendButton(true);
-        setApprovedPatients([...approvedPatients, patientToApprove.id]);
-      } catch (error) {
-        console.error('Error approving patient:', error);
-      }
-    } else {
-      console.log('You do not have permission to approve patients or no patient selected.');
+  const handleApprove = async (patient) => {
+    try {
+      await axios.patch(`http://127.0.0.1:4000/patients/${patient.nationalid}`, {
+        status: true,
+        buttonDisableStatus: false // Update the button disable status to false
+      });
+      // Update the status in the statuses state object
+      setStatuses(prevStatuses => ({
+        ...prevStatuses,
+        [patient.nationalid]: true
+      }));
+      // Add the approved patient to the list of approved patients
+      setApprovedPatients(prevApprovedPatients => [...prevApprovedPatients, patient.nationalid]);
+      await fetchAllPatients();
+    } catch (error) {
+      console.error('Error approving patient:', error);
     }
+  };
+
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
   };
 
   const getRiskPercentageColor = (riskLevel) => {
@@ -108,100 +125,99 @@ function Report() {
     return result === 'High' ? 'bg-danger text-white' : '';
   };
 
-  const handleApproveConfirmation = (patient) => {
-    setPatientToApprove(patient);
-    setShowApproveModal(true);
-  };
 
-  const handleSendPDF = async (patientId) => {
-    try {
-      console.log(`Sending PDF to patient with ID ${patientId}`);
-    } catch (error) {
-      console.error('Error sending PDF:', error);
-    }
-  };
+  // Filter patients based on search query
+  const filteredPatients = filterPatientsByNIC(patients, searchQuery);
 
   return (
-    <div className="container-fluid mt-3 report-container">
+    <Container fluid className="mt-9 report-container">
       <LoadingModal show={isLoading} />
-      <div className="mt-3">
-        <h2 className="text-center report">Patients Report</h2>
-        {error ? (
-          <p className="error">Error: {error}</p>
-        ) : patients.length === 0 ? (
-          <p>No patients found.</p>
-        ) : (
-          <Table bordered hover className="table-responsive">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>National ID</th>
-                <th>Email</th>
-                <th>Sex</th>
-                <th>Age</th>
-                <th>Date</th>
-                <th>Risk Level Percentage</th>
-                <th>Result</th>
-                <th>Stress Level</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {patients.map((patient, index) => (
-                <tr key={index}>
-                  <td>{patient.name}</td>
-                  <td>{patient.nationalid}</td>
-                  <td>{patient.email}</td>
-                  <td>{patient.sex === '1' ? 'Male' : 'Female'}</td>
-                  <td>{patient.age}</td>
-                  <td>{patient.date}</td>
-                  <td className={getRiskPercentageColor(patient.risk_level_percentage)}>{patient.risk_level_percentage}</td>
-                  <td className={getResultColor(patient.result)}>{patient.result}</td>
-                  <td className={getStressLevelColor(patient.stress_level)}>{patient.stress_level}</td>
-                  <td className="actions">
-                    <Button variant="danger" className="tb-btn" onClick={() => handleDeleteConfirmation(patient)}>Delete</Button>
-                    <Button variant="warning" onClick={() => handleViewPDF(patient)}>PDF</Button>
-                    {showSendButton && userRole !== 'manager' && (
-                      <Button variant="primary" className="tb-btn" onClick={() => handleSendPDF(patient.id)}>Send</Button>
-                    )}
-                    {userRole === 'manager' && (
-                      <Button
-                        variant="success"
-                        className="tb-btn"
-                        onClick={() => handleApproveConfirmation(patient)}
-                        disabled={approvedPatients.includes(patient.id)}
-                      >
-                        {approvedPatients.includes(patient.id) ? 'Approved' : 'Approve'}
-                      </Button>
-                    )}
-                  </td>
+      <Row className="mt-3">
+        <Col>
+          
+        </Col>
+      </Row>
+      <Row className="mt-3">
+        <Col>
+          <div className="search-bar">
+            <input
+              type="text"
+              className='form-control'
+              placeholder="Search by NIC number..."
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+            />
+          </div>
+        </Col>
+      </Row>
+      <Row className="mt-3">
+        <Col>
+          {error ? (
+            <p className="error">Error: {error}</p>
+          ) : filteredPatients.length === 0 ? (
+            <p>No patients found.</p>
+          ) : (
+            <Table bordered hover className="table-responsive">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>National ID</th>
+                  <th>Email</th>
+                  <th>Sex</th>
+                  <th>Age</th>
+                  <th>Date</th>
+                  <th>Risk Level Percentage</th>
+                  <th>Result</th>
+                  <th>Stress Level</th>
+                  <th>Actions</th>
+                  <th>Status</th> {/* New column for status */}
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </div>
-      <Modal show={showApproveModal} onHide={() => setShowApproveModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Approve Patient</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to approve this patient report?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={() => setShowApproveModal(false)}>No</Button>
-          <Button variant="success" onClick={handleApprove}>Yes</Button>
-        </Modal.Footer>
-      </Modal>
+              </thead>
+              <tbody>
+                {filteredPatients.map((patient, index) => (
+                  <tr key={index}>
+                    <td>{patient.name}</td>
+                    <td>{patient.nationalid}</td>
+                    <td>{patient.email}</td>
+                    <td>{patient.sex === '1' ? 'Male' : 'Female'}</td>
+                    <td>{patient.age}</td>
+                    <td>{patient.date}</td>
+                    <td className={getRiskPercentageColor(patient.risk_level_percentage)}>{patient.risk_level_percentage}</td>
+                    <td className={getResultColor(patient.result)}>{patient.result}</td>
+                    <td className={getStressLevelColor(patient.stress_level)}>{patient.stress_level}</td>
+                    <td className="actions">
+                      <Button variant="danger" className="tb-btn" onClick={() => handleDeleteConfirmation(patient)}>Delete</Button>
+                      <Button variant="warning" onClick={() => handleViewPDF(patient)}>PDF</Button>
+                      {userRole === 'manager' && !approvedPatients.includes(patient.nationalid) && (
+                        <Button
+                          variant="success"
+                          className="tb-btn"
+                          onClick={() => handleApprove(patient)} // Call handleApprove on click
+                          disabled={statuses[patient.nationalid]} // Disable button based on status
+                        >
+                          Approve
+                        </Button>
+                      )}
+                    </td>
+                    <td>{statuses[patient.nationalid] ? 'Approved' : 'Pending'}</td> {/* Display status */}
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Col>
+      </Row>
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Delete Patient</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to delete this patient record?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>No</Button>
+          <Button variant="warning" onClick={() => setShowDeleteModal(false)}>No</Button>
           <Button variant="danger" onClick={handleDelete}>Yes</Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </Container>
   );
 }
 
