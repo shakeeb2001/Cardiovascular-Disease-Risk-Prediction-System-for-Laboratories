@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export default class PercentageCircle extends React.Component {
   constructor(props) {
     super(props);
@@ -71,7 +70,7 @@ export default class PercentageCircle extends React.Component {
     } = this;
 
     const viewbox = `0 0 ${circleSize} ${circleSize}`;
-    const strokeWidth = circleSize / 14;
+    const strokeWidth = circleSize / 17;
     const diameter = circleSize - strokeWidth;
     const radius = diameter / 2;
     const circumference = 2 * Math.PI * radius;
@@ -147,8 +146,8 @@ export default class PercentageCircle extends React.Component {
 }
 
 PercentageCircle.defaultProps = {
-  circleSize: 190,
-  percent: 33,
+  circleSize: 150, // Increased size
+  percent: 39,
   duration: 1000,
   offset: 200,
 };

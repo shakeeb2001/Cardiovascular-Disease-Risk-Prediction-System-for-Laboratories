@@ -3,3 +3,12 @@
     margin: 30px;
     padding-top: 60px;
 }
+
+.edit-model{
+    background-color: rgb(9, 70, 54);
+    color: black;
+}
+.btn-width{
+    width: 90px;
+    margin: 2px;
+}

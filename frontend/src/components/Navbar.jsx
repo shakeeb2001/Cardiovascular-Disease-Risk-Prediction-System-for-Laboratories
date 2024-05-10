@@ -37,8 +37,10 @@ const Navbar = () => {
 
   const isLoginPage = location.pathname === '/login';
   const isLoginHome = location.pathname === '/home';
+  const isResultPage = location.pathname === '/result';
 
   const isReportPage = location.pathname === '/reports';
+  const isDashboardPage = location.pathname === '/';
   const isCommunicationPage = location.pathname === '/communication';
   const isSettingsPage = location.pathname === '/settings';
   const isPredictionPage = location.pathname === '/prediction';
@@ -54,10 +56,12 @@ const Navbar = () => {
               C A R D I O C A R E <span className='cardio-care'>+</span>
             </h6>
           </Link>
-          {(isReportPage || isCommunicationPage || isSettingsPage || isPredictionPage || isRegisterPage) && (
+          {(isResultPage || isDashboardPage || isReportPage || isCommunicationPage || isSettingsPage || isPredictionPage || isRegisterPage) && (
             <div className="d-flex justify-content-center w-100">
               <h5 className="fw-bold mb-2 navbar-text text-nav-center">
                 {isReportPage && 'Patient Reports'}
+                {isResultPage && 'Patient Risk Result'}
+                {isDashboardPage && 'Dashbord'}
                 {isCommunicationPage && 'Communication'}
                 {isSettingsPage && 'Settings'}
                 {isPredictionPage && 'Prediction'}

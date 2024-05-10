@@ -1,7 +1,7 @@
 
 body {
     background-color: rgb(14, 74, 66);
-   overflow: hidden;
+   overflow: auto;
   }
 
 .form-heding{
@@ -15,7 +15,6 @@ body {
 
 }
  
-
   .predction-form-card{
     background-color: rgba(13, 84, 75, 0.96);
     width: 90%;
@@ -51,8 +50,9 @@ body {
   .btn-secondary {
     width: 50%;
     margin-left: 120px;
-    background-color: rgb(25, 148, 132);
-    color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    color: rgb(10, 78, 51);
+    font-weight: 500;
     border: none;
   }
   

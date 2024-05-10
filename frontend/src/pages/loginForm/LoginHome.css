@@ -16,6 +16,51 @@
 }
 
 /* Styles for larger screens */
+@media (min-width: 868px) {
+    .welcomehome {
+        padding-top: 280px;
+
+    }
+
+    .title-card-two {
+        width: 95%;
+        bottom: 220px;
+        background-color: #fffbfb00;
+        border: none;
+        color: #fffbfb;
+        
+    }
+
+    .Para-card {
+        width: 80%;
+        font-size: large;
+        padding: 30px;
+        height: 400px;
+        bottom: 60px;
+        left: 150px;
+        background-color: rgba(240, 248, 255, 0.164);
+        color: #fffbfb;
+    }
+
+    .title-card-one-welcome{
+        text-align: center;
+        
+    }
+    .welcome-button {
+        color: rgb(188, 55, 55);
+        width: 220px;
+        font-weight: 500;
+        margin-left: 800px;
+        margin-top: 30px;
+        background-color: #fffbfb;
+        border: none;
+    }
+}
+
+
+
+
+/* Styles for larger screens */
 @media (min-width: 768px) {
     .welcomehome {
         padding-top: 280px;
@@ -72,6 +117,9 @@
         bottom: 20px;
         border-radius: 20px;
     }
+    .propic{
+        display: none;
+     }
 }
 
 /* Additional styles for mobile devices */
@@ -99,6 +147,9 @@
         bottom: 20px;
         border-radius: 20px;
     }
+    .propic{
+        display: none;
+     }
 }
 
 @media (max-width: 575px) {
@@ -122,6 +173,10 @@
         color: #fffbfb;
         bottom: 20px;
         border-radius: 20px;
+    }
+
+    .propic{
+       display: none;
     }
 }
 .content{

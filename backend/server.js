@@ -63,6 +63,32 @@ app.post('/register', upload.single('profilePic'), async (req, res) => {
     }
 });
 
+// Add a route to fetch the total count of patients for each month
+app.get('/patient-count-by-month', async (req, res) => {
+    try {
+        const patientsSnapshot = await db.collection('patients').get();
+        const monthCountMap = {};
+
+        patientsSnapshot.forEach(doc => {
+            const date = doc.data().date.toDate(); // Assuming the date is stored as a Firestore Timestamp
+            const month = date.toLocaleString('default', { month: 'short' });
+
+            // Increment the count for the corresponding month
+            monthCountMap[month] = (monthCountMap[month] || 0) + 1;
+        });
+
+        const patientCountByMonth = Object.entries(monthCountMap).map(([month, count]) => ({
+            month,
+            count
+        }));
+
+        res.status(200).json(patientCountByMonth);
+    } catch (error) {
+        console.error('Error fetching patient count by month:', error);
+        res.status(500).json({ message: 'Failed to fetch patient count by month' });
+    }
+});
+
 
 
 app.get('/register/:username', async (req, res) => {
@@ -196,7 +222,6 @@ app.post('/login', async (req, res) => {
 });
 
 
-
 // Add this route to your Express server
 app.get('/patient-count', async (req, res) => {
     try {
@@ -226,16 +251,48 @@ app.post('/increment-prediction-count', async (req, res) => {
 });
 
 
+// Assuming you're using Express.js for the backend
+
 app.get('/prediction-count', async (req, res) => {
     try {
       const predictionSnapshot = await db.collection('predictionCounts').doc('countDocument').get();
       const count = predictionSnapshot.data().predictionCount;
       res.status(200).json({ count });
+  
+      // Save the count along with the current date
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().split('T')[0]; // Get date in YYYY-MM-DD format
+      await db.collection('predictionCountsByDate').doc(formattedDate).set({
+        count: count,
+        date: currentDate
+      });
     } catch (error) {
-      console.error('Error fetching prediction count:', error);
-      res.status(500).json({ message: 'Failed to fetch prediction count' });
+      console.error('Error fetching and saving prediction count:', error);
+      res.status(500).json({ message: 'Failed to fetch and save prediction count' });
     }
   });
+
+  app.get('/prediction-counts-by-date', async (req, res) => {
+    try {
+      // Query the database to get prediction counts for each date
+      const predictionCountsSnapshot = await db.collection('predictionCountsByDate').get();
+      const predictionCounts = [];
+      predictionCountsSnapshot.forEach(doc => {
+        const data = doc.data();
+        predictionCounts.push({
+          date: data.date.toDate(), // Convert Firestore Timestamp to JavaScript Date object
+          count: data.count
+        });
+      });
+      res.status(200).json(predictionCounts);
+    } catch (error) {
+      console.error('Error fetching prediction counts by date:', error);
+      res.status(500).json({ message: 'Failed to fetch prediction counts by date' });
+    }
+  });
+  
+  
+  
   
 
 // Add a route to fetch patient data
@@ -400,7 +457,9 @@ app.get('/messages', async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch messages' });
     }
 });
-  
+
+
+
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

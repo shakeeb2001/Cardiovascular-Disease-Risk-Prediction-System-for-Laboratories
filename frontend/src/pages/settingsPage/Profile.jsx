@@ -62,9 +62,9 @@ const Profile = () => {
                       src={`http://127.0.0.1:4000${userData.profilePicUrl}`} 
                       alt="Profile Picture" 
                       style={{ 
-                          width: '100%', /* Set width to 100% for responsiveness */
-                          maxWidth: '250px', /* Set max width to maintain aspect ratio */
-                          height: 'auto', /* Automatically adjust height */
+                          width: '100%', 
+                          maxWidth: '250px', 
+                          height: 'auto', 
                           borderRadius: '50%' 
                       }}
                   />

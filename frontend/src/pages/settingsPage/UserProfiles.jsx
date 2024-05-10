@@ -99,8 +99,8 @@ const UserProfile = () => {
                 <td>{user.username}</td>
                 <td className="d-none d-sm-table-cell">{user.password}</td>
                 <td>
-                  <Button variant="success" onClick={() => handleUpdate(user)}>Update</Button>{' '}
-                  <Button variant="danger" onClick={() => handleDelete(user)}>Delete</Button>
+                  <Button variant="success btn-width" onClick={() => handleUpdate(user)}>Update</Button>{' '}
+                  <Button variant="danger btn-width" onClick={() => handleDelete(user)}>Delete</Button>
                 </td>
               </tr>
             ))}
@@ -113,43 +113,43 @@ const UserProfile = () => {
   <Modal.Header closeButton>
     <Modal.Title>Update User</Modal.Title>
   </Modal.Header>
-  <Modal.Body>
+  <Modal.Body className='edit-model'>
     <Form>
       <Form.Group controlId="formName">
         <Form.Label>Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter name" value={updatedUser ? updatedUser.name : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })} />
+        <Form.Control className='bg-light text-dark'  type="text" placeholder="Enter name" value={updatedUser ? updatedUser.name : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })} />
       </Form.Group>
       <Form.Group controlId="formEmail">
         <Form.Label>Email</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" value={updatedUser ? updatedUser.email : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })} />
+        <Form.Control className='bg-light text-dark' type="email" placeholder="Enter email" value={updatedUser ? updatedUser.email : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, email: e.target.value })} />
       </Form.Group>
       <Form.Group controlId="formMobileNumber">
         <Form.Label>Mobile Number</Form.Label>
-        <Form.Control type="text" placeholder="Enter mobile number" value={updatedUser ? updatedUser.mobileNumber : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, mobileNumber: e.target.value })} />
+        <Form.Control className='bg-light text-dark' type="text" placeholder="Enter mobile number" value={updatedUser ? updatedUser.mobileNumber : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, mobileNumber: e.target.value })} />
       </Form.Group>
       <Form.Group controlId="formAddress">
         <Form.Label>Address</Form.Label>
-        <Form.Control type="text" placeholder="Enter address" value={updatedUser ? updatedUser.address : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, address: e.target.value })} />
+        <Form.Control className='bg-light text-dark' type="text" placeholder="Enter address" value={updatedUser ? updatedUser.address : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, address: e.target.value })} />
       </Form.Group>
       <Form.Group controlId="formUserRole">
         <Form.Label>User Role</Form.Label>
-        <Form.Control as="select" value={updatedUser ? updatedUser.userRole : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, userRole: e.target.value })}>
+        <Form.Control className='bg-light text-dark' as="select" value={updatedUser ? updatedUser.userRole : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, userRole: e.target.value })}>
           <option value="manager">Manager</option>
           <option value="assistant">Assistant</option>
         </Form.Control>
       </Form.Group>
       <Form.Group controlId="formUsername">
         <Form.Label>Username</Form.Label>
-        <Form.Control type="text" placeholder="Enter username" value={updatedUser ? updatedUser.username : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, username: e.target.value })} />
+        <Form.Control className='bg-light text-dark' type="text" placeholder="Enter username" value={updatedUser ? updatedUser.username : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, username: e.target.value })} />
       </Form.Group>
       <Form.Group controlId="formPassword">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Enter password" value={updatedUser ? updatedUser.password : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, password: e.target.value })} />
+        <Form.Control className='bg-light text-dark' type="password" placeholder="Enter password" value={updatedUser ? updatedUser.password : ''} onChange={(e) => setUpdatedUser({ ...updatedUser, password: e.target.value })} />
       </Form.Group>
     </Form>
   </Modal.Body>
   <Modal.Footer>
-    <Button variant="warning" onClick={handleClose}>
+    <Button variant="danger" onClick={handleClose}>
       Cancel
     </Button>
     <Button variant="success" onClick={handleSave}>

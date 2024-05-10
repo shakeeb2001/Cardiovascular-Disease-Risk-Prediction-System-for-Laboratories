@@ -1,28 +1,28 @@
+// Settings.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import './SettingPage.css'; 
 import UserProfileCreation from '../accoutCreatatingFrom/AcFrom'; 
 import Profile from './Profile'; 
 import UserProfiles from './UserProfiles'; 
+import Analysis from './Analysis'; 
 
-const Settings = ({ loggedInUsername }) => {
+const Settings = ({ loggedInUsername,patientCountByMonth }) => {
   const [userData, setUserData] = useState(null);
   const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || ''); 
   const [activeTab, setActiveTab] = useState("profile");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   useEffect(() => {
-    // Save userRole to local storage whenever it changes
     localStorage.setItem('userRole', userRole);
     const storedUserRole = localStorage.getItem('userRole');
     if (storedUserRole) {
       setUserRole(storedUserRole);
     }
-  }, [userRole]); // Add userRole to dependencies to update activeTab when userRole changes
+  }, [userRole]);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    // Store active tab in localStorage if user is a manager
     if (userRole === "manager") {
       localStorage.setItem("activeTab", tab);
     }
@@ -40,7 +40,7 @@ const Settings = ({ loggedInUsername }) => {
           </li>
           {userRole === "manager" && (
             <li>
-              <a href="#" className={activeTab === "report" ? "active" : ""} onClick={() => handleTabClick("report")}>
+              <a href="#" className={activeTab === "analysis" ? "active" : ""} onClick={() => handleTabClick("analysis")}>
                 <i className="zmdi zmdi-link"></i>
                 <i className="fas fa-chart-line"></i> Analysis Report
               </a>
@@ -63,20 +63,16 @@ const Settings = ({ loggedInUsername }) => {
             </li>
           )}
           <li>
-            <a href="#" className={activeTab === "about" ? "active" : ""} onClick={() => handleTabClick("about")}>
-              <i className="zmdi zmdi-info-outline"></i>
-              <i className="fas fa-info-circle"></i> About
-            </a>
+           
           </li>
         </ul>
       </div>
       {/* Content */}
       <div id="content">
         {activeTab === "profile" && <Profile username={loggedInUsername} />}
-        {activeTab === "report" && userRole === "manager" && <div>Analysis Report</div>}
+        {activeTab === "analysis" && userRole === "manager" && <Analysis patientCountByMonth={patientCountByMonth} />}
         {activeTab === "creation" && userRole === "manager" && <UserProfileCreation username={loggedInUsername} />}
         {activeTab === "userProfiles" && userRole === "manager" && <UserProfiles />}
-        {activeTab === "about" && <div>About</div>}
       </div>
     </div>
   );
