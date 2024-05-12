@@ -5,7 +5,7 @@
 
 Cardio Care is a cardiovascular risk prediction system designed specifically for laboratory environments. It enables laboratories to predict cardiovascular risks accurately, aiding in proactive healthcare management.
 
-#### patients
+#### Patients
 
 -	Patient Profile Form
 -	View Patient Reports
