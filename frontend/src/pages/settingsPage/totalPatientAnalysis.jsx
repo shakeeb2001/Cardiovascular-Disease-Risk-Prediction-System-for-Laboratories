@@ -26,7 +26,7 @@ const BarAnimation = () => {
 
   return (
     <Box className='bg' sx={{ width: '100%' }}>
-      <Typography variant="h5" sx={{ color: '#fff' }}>Prediction Count Bar Chart</Typography>
+      <Typography variant="h5">Prediction Counts Per Day</Typography>
       <BarChart
         className='barchart'
         height={400}

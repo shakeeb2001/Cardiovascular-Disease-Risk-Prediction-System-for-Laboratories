@@ -107,45 +107,47 @@ const Chat = ({ loggedInUsername }) => {
     [...messages].sort((a, b) => a.sender === 'assistant' ? -1 : 1);
 
   return (
+    
     <div className="container py-5" style={backgroundImageStyle}>
-     {userRole === 'manager' ? <h2 className='chat-role'>Chat With Assistant</h2> : <h2 className='chat-role'>Chat With Manager</h2>}
-      <div className="row rounded-lg overflow-hidden shadow chat-container">
-        {/* Chat Box */}
-        <div className="col-12 px-0">
-          <div className="px-4 py-5 chat-box">
-          {orderedMessages.map((msg, index) => (
-  <div key={index} className={`media w-50 mb-3 ${msg.sender === 'manager' ? 'ml-auto' : ''}`}>
-    <div className={`media-body ${msg.sender === 'manager' ? 'text-right' : ''}`}>
-    <div className={`bg-${msg.sender === 'manager' ? 'secondary' : 'light'} rounded py-2 px-3 mb-2 ${msg.sender === 'manager' ? 'mr-0' : ''}`} style={{ backgroundColor: msg.sender === 'manager' ? 'rgb(11, 74, 65)' : '' }}>
-  <p className={`text-small mb-0 text-${msg.sender === 'manager' ? 'white' : 'black'}`}>
-    {msg.sender === 'manager' ? 'Manager: ' : 'Assistant: '} {msg.message}
-  </p>
-</div>
-    </div>
-  </div>
-))}
-
-            {communicationNotification && <div className="notification">New message received</div>}
-          </div>
-          {/* Typing area */}
-          <form onSubmit={sendMessage} className="bg-light ">
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Type a message"
-                aria-describedby="button-addon2"
-                className="form-control rounded-0 border-0 py-3 chat-box-input"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-              <div className="input-group-append">
-                <button type="submit" className="btn btn-primary">Send</button>
+  {userRole === 'manager' ? <h2 className='chat-role'>Chat With Assistant</h2> : <h2 className='chat-role'>Chat With Manager</h2>}
+  <div className="row rounded-lg overflow-hidden shadow chat-container">
+    {/* Chat Box */}
+    <div className="col-12 px-0">
+    {communicationNotification && <div className="notification">New message received</div>}
+      <div className="px-4 py-5 chat-box">
+        {orderedMessages.map((msg, index) => (
+          <div key={index} className={`media w-50 mb-3 ${msg.sender === 'manager' ? 'ml-auto' : ''}`}>
+            <div className={`media-body ${msg.sender === 'manager' ? 'text-right' : ''}`}>
+              <div className={`bg-${msg.sender === 'manager' ? 'secondary' : 'light'} rounded py-2 px-3 mb-2 ${msg.sender === 'manager' ? 'mr-0' : ''}`} style={{ backgroundColor: msg.sender === 'manager' ? 'rgb(11, 74, 65)' : '' }}>
+                <p className={`text-small mb-0 text-${msg.sender === 'manager' ? 'white' : 'black'}` }>
+                  {msg.sender === 'manager' ? 'Manager: ' : 'Assistant: '} {msg.message}
+                </p>
               </div>
             </div>
-          </form>
-        </div>
+          </div>
+        ))}
+       
       </div>
+      {/* Typing area */}
+      <form onSubmit={sendMessage} className="bg-light ">
+        <div className="input-group">
+          <input
+            type="text"
+            placeholder="Type a message"
+            aria-describedby="button-addon2"
+            className="form-control rounded-0 border-0 py-3 chat-box-input"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <div className="input-group-append">
+            <button type="submit" className="btn btn-primary">Send</button>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
+</div>
+
   );
 }
 

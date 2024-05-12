@@ -198,8 +198,13 @@ function Report() {
                           Approve
                         </Button>
                       )}
+                
+                   {userRole === 'assistent' && (     
+                          <Button variant="success" >Ready to Send</Button>
+                   )}
                     </td>
                     <td>{statuses[patient.nationalid] ? 'Approved' : 'Pending'}</td> {/* Display status */}
+                    
                   </tr>
                 ))}
               </tbody>

@@ -166,31 +166,31 @@ def predict():
         probability_adjustment += 0.2
 
     if input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 1:
-        probability_adjustment += 0.036
+        probability_adjustment += 0.36
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 2:
-        probability_adjustment += 0.072
+        probability_adjustment += 0.72
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 3:
-        probability_adjustment += 0.108
+        probability_adjustment +=  1.08
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 4:
-        probability_adjustment += 0.144
+        probability_adjustment += 1.14
 
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 5:
-        probability_adjustment += 0.18
+        probability_adjustment += 1.8
 
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 6:
-        probability_adjustment += 0.216
+        probability_adjustment += 2.1
 
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 7:
-        probability_adjustment += 0.252
+        probability_adjustment += 2.5
     
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 8:
-        probability_adjustment += 0.288
+        probability_adjustment += 2.88
     
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 9:
-        probability_adjustment += 0.324
+        probability_adjustment += 3.24
 
     elif input_data['currentSmoker'].values[0] == 1 and input_data['cigsPerDay'].values[0] > 10:
-        probability_adjustment += 0.36
+        probability_adjustment += 3.6
 
     heart_rate = input_data['heartRate'].values[0]
     sysBP = input_data['sysBP'].values[0]
@@ -210,7 +210,7 @@ def predict():
 
     risk_level_percentage = adjusted_probability * 100
 
-    if risk_level_percentage >= 75:
+    if risk_level_percentage >= 70:
         result = "High"
     elif risk_level_percentage >= 50:
         result = "Medium"

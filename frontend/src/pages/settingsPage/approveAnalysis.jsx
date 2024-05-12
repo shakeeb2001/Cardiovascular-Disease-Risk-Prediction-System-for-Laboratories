@@ -33,7 +33,7 @@ const BarAnimation = () => {
 
   return (
     <Box className='bg' sx={{ width: '100%' }}>
-      <Typography variant="h5">Bar Chart</Typography>
+      <Typography variant="h5">Patient Report Status</Typography>
       <BarChart
         height={300}
         series={[

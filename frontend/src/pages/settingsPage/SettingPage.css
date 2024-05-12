@@ -54,26 +54,17 @@ body {
   text-align: center;
 }
 
-#sidebar header a {
-  color: #fff;
-  display: block;
-  text-decoration: none;
-}
-
-#sidebar header a:hover {
-  color: #fff;
-}
-
-#sidebar .nav {
-}
-
 #sidebar .nav a {
   background: none;
-  color: #ffffff;
+  color: #b0bec5; /* Default gray color for tabs */
   font-size: 20px;
   padding: 16px 24px;
   line-height: 80px;
   text-decoration: none;
+}
+
+#sidebar .nav a.active {
+  color: #fff; /* Active tab in white color */
 }
 
 #sidebar .nav a:hover {

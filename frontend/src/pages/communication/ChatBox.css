@@ -1,112 +1,137 @@
 body {
-    min-height: 100vh;
-    overflow: hidden;
-  }
+  min-height: 100vh;
+  overflow: hidden;
+}
 
- .container{
+.container {
   width: 100%;
- }
+}
 
-  .chat-container{
-    margin-left: 290px;
-    margin-right: 150px;
-    width: 700px;
-  }
-  
+.chat-container {
+  margin-left: 290px;
+  margin-right: 150px;
+  width: 700px;
+}
 
-  
-  .text-small {
-    font-size: 0.9rem;
-  }
-  
-  .messages-box,
-  .chat-box {
-    height: 450px;
-    overflow-y: scroll;
+.text-small {
+  font-size: 0.9rem;
+}
 
+.messages-box,
+.chat-box {
+  height: 450px;
+  overflow-y: scroll;
+}
 
-  }
-  
-  .rounded-lg {
-    border-radius: 0.5rem;
-  }
-  
-  input::placeholder {
-    font-size: 0.9rem;
-    color: #4c4949;
-  }
-  
-/* Add this CSS to ChatBox.css */
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+input::placeholder {
+  font-size: 0.9rem;
+  color: #4c4949;
+}
+
+/* Additional CSS for chat box input */
 .chat-box-input {
   color: black !important; 
   height: 52px;
   background-color: #7a7a7a;
-
 }
 
+.chat-box-send-button {
+  color: black; 
+}
+
+.chat-box-send-button:hover {
+  background-color: #ffffff; 
+}
+
+h4 {
+  text-align: left;
+  color: #7a7a7a;
+}
+
+.btn-primary {
+  background-color: #ffffff;
+  color: rgb(11, 107, 70);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #125e41;
+}
+
+.h4 {
+  text-align: left;
+  color: #065d3c;
+}
+
+.chat-box {
+  background-color: #7a7a7ac0;
+}
+
+.chat-role {
+  color: #ffffff;
+  width: 300px;
+  padding-top: 70px;
+  margin-top: -2px;
+}
+
+/* Media query for small screens */
+@media (max-width: 576px) {
+  .chat-container {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: auto;
+  }
+
+  .chat-role {
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+  }
+
+  .chat-box {
+    max-height: 300px;
+  }
+
+  .chat-box-input {
+    height: 40px;
+  }
+
   .chat-box-send-button {
-    color: black; 
-    
+    padding: 8px 12px;
+    font-size: 14px;
   }
-  
-  .chat-box-send-button:hover {
-    background-color: #ffffff; 
-  }
-  
+}
 
-  h4{
-    text-align: left;
-    color: #7a7a7a;
-  }
-  
- 
-  .btn-primary {
-    background-color: #ffffff; /* Set button background color */
-    color: rgb(11, 107, 70); /* Set button text color */
-    border: none; /* Remove button border */
-  }
-  
-  .btn-primary:hover {
-    background-color: #125e41; /* Change background color on hover */
-  }
-  
-  .h4 {
-    text-align: left;
-    color: #065d3c;
-  }
-  .chat-box{
-    background-color: #7a7a7ac0;
-  }
-  .chat-role{
-    color: #ffffff;
-    width: 300px;
-    padding-top: 70px;
-    margin-top: -2px;
-  }
+/* CSS for sent messages */
+.chat-box .sent-message {
+  text-align: right;
+}
 
-  @media (max-width: 576px) {
-    .chat-container {
-      margin-left: 10px; /* Adjust left margin */
-      margin-right: 10px; /* Adjust right margin */
-      width: auto; /* Set width to auto */
-    }
-    
-    .chat-role {
-      width: 100%; /* Set width to 100% */
-      text-align: center; /* Center align text */
-      padding-top: 20px; /* Adjust top padding */
-    }
-    
-    .chat-box {
-      max-height: 300px; /* Reduce max height */
-    }
-    
-    .chat-box-input {
-      height: 40px; /* Reduce input height */
-    }
-    
-    .chat-box-send-button {
-      padding: 8px 12px; /* Adjust padding */
-      font-size: 14px; /* Adjust font size */
-    }
-  }
+/* CSS for received messages */
+.chat-box .received-message {
+  text-align: left;
+}
+
+/* CSS for message bubbles */
+.message-bubble {
+  display: inline-block;
+  max-width: 70%;
+  word-wrap: break-word;
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 15px;
+}
+
+.sent-message .message-bubble {
+  background-color: #2ecc71; /* Green */
+  color: white;
+}
+
+.received-message .message-bubble {
+  background-color: #f0f0f0; /* Light gray */
+  color: black;
+}
